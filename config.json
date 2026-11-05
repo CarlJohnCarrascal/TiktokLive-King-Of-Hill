@@ -1,0 +1,14 @@
+{
+  "tiktokUsername": "nickarchieilag",
+  "hpMultiplier": 1,
+  "maxHp": 50000,
+  "minStartingHp": 10,
+  "enableDecay": false,
+  "decayAmount": 5,
+  "decayIntervalSeconds": 3,
+  "soundEnabled": true,
+  "soundVolume": 0.8,
+  "theme": "cyber-arena",
+  "orientation": "landscape",
+  "likesPerHp": 1000
+}

@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-fighting: 'Russo One', sans-serif;
+    --font-condensed: 'Teko', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+  }
+
+  body {
+    font-family: var(--font-body);
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+}
+
+.font-fighting {
+  font-family: var(--font-fighting);
+  letter-spacing: 0.04em;
+}
+
+.font-condensed {
+  font-family: var(--font-condensed);
+  letter-spacing: 0.05em;
+}
+
+/* Screen / Card Shake on Hit */
+@keyframes card-shake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(-8px, 4px) rotate(-1.5deg); }
+  40% { transform: translate(8px, -4px) rotate(1.5deg); }
+  60% { transform: translate(-5px, 2px) rotate(-0.8deg); }
+  80% { transform: translate(5px, -2px) rotate(0.8deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.animate-card-shake {
+  animation: card-shake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Floating combat text animation */
+@keyframes float-up-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.25);
+  }
+  35% {
+    transform: translateY(-20px) scale(1.0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-60px) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-90px) scale(0.7);
+  }
+}
+
+.animate-float-damage {
+  animation: float-up-fade 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* KO Banner Impact Explosion */
+@keyframes ko-banner-in {
+  0% {
+    opacity: 0;
+    transform: scale(2.2) translateY(-40px);
+    filter: blur(10px) brightness(2.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(0.96) translateY(5px);
+    filter: blur(0px) brightness(1.2);
+  }
+  75% {
+    transform: scale(1.03) translateY(-2px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    filter: brightness(1);
+  }
+}
+
+.animate-ko-banner {
+  animation: ko-banner-in 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Pulse Glow Effect for Champion */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(234, 179, 8, 0.35), 0 0 30px rgba(234, 179, 8, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(234, 179, 8, 0.75), 0 0 50px rgba(234, 179, 8, 0.35);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s infinite ease-in-out;
+}
+
+/* Bar flash on damage */
+@keyframes bar-flash {
+  0% { filter: brightness(2.2) saturate(1.8); }
+  100% { filter: brightness(1) saturate(1); }
+}
+
+.animate-bar-flash {
+  animation: bar-flash 0.3s ease-out;
+}
+
+/* Custom Scrollbars for control sidebars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.5);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.8);
+}

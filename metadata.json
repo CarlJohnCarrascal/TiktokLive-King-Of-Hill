@@ -1,0 +1,6 @@
+{
+  "name": "TikTok LIVE King of the Hill Overlay",
+  "description": "Arena-style King of the Hill browser source overlay for OBS and TikTok LIVE Studio with real-time gift battles, health bars, sound effects, and test controls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
