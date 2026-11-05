@@ -38,9 +38,16 @@ interface ControlPanelProps {
     nickname: string;
     profilePictureUrl?: string;
     giftName: string;
+    giftPictureUrl?: string;
     diamondCount: number;
     repeatCount: number;
     coins: number;
+  }) => void;
+  onSimulateLike?: (likeData: {
+    userId?: string;
+    nickname: string;
+    profilePictureUrl?: string;
+    likeCount: number;
   }) => void;
   onUpdateConfig: (newConfig: Partial<GameConfig>) => void;
   onConnectTikTok: (username: string) => void;
@@ -53,6 +60,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   config,
   tiktokStatus,
   onSimulateGift,
+  onSimulateLike,
   onUpdateConfig,
   onConnectTikTok,
   onDisconnectTikTok,
@@ -276,7 +284,45 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {gameState.currentKing && onSimulateLike && (
+                <>
+                  <button
+                    onClick={() => {
+                      const challengerName = `LikeChallenger_${Math.floor(Math.random() * 900 + 100)}`;
+                      onSimulateLike({
+                        userId: `liker_${challengerName.toLowerCase()}`,
+                        nickname: challengerName,
+                        profilePictureUrl: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(challengerName)}`,
+                        likeCount: config.likesPerHp || 100
+                      });
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600/30 hover:bg-rose-600/50 border border-rose-500/60 text-rose-300 hover:text-white text-xs font-fighting uppercase tracking-wider transition-all"
+                    title="Simulates 100 heart likes from a challenger viewer to decrease Defender HP by -1"
+                  >
+                    <Swords className="w-3.5 h-3.5 text-rose-400" />
+                    <span>{config.likesPerHp || 100} Likes Attack (-1 HP)</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (!gameState.currentKing) return;
+                      onSimulateLike({
+                        userId: gameState.currentKing.userId,
+                        nickname: gameState.currentKing.nickname,
+                        profilePictureUrl: gameState.currentKing.profilePictureUrl,
+                        likeCount: config.likesPerHp || 100
+                      });
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-600/30 hover:bg-teal-600/50 border border-teal-500/60 text-teal-300 hover:text-white text-xs font-fighting uppercase tracking-wider transition-all"
+                    title="Simulates current Defender sending 100 heart likes to heal her own HP by +1"
+                  >
+                    <Heart className="w-3.5 h-3.5 text-teal-400 fill-teal-400" />
+                    <span>Defender {config.likesPerHp || 100} Likes (+1 HP)</span>
+                  </button>
+                </>
+              )}
+
               <button
                 onClick={handleLethalKO}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-600/30 hover:bg-red-600/50 border border-red-500/60 text-red-300 hover:text-white text-xs font-fighting uppercase tracking-wider transition-all"
@@ -290,10 +336,10 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 <button
                   onClick={() => handleQuickGift(POPULAR_TIKTOK_GIFTS[2], true)}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/60 text-emerald-300 hover:text-white text-xs font-fighting uppercase tracking-wider transition-all"
-                  title="Simulates current King sending a gift to heal"
+                  title="Simulates current Defender sending a gift to heal her own HP"
                 >
                   <Heart className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
-                  <span>Heal King (+100 HP)</span>
+                  <span>Defender Gift Heal (+100 HP)</span>
                 </button>
               )}
 
@@ -554,7 +600,26 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                   className="w-full accent-amber-400 cursor-pointer"
                 />
                 <p className="text-[11px] text-slate-400 mt-1">
-                  Guarantees the new King starts with at least this much HP if leftover damage was 0.
+                  Guarantees the new Defender starts with at least this much HP if leftover damage was 0.
+                </p>
+              </div>
+
+              <div>
+                <div className="flex justify-between text-xs mb-1">
+                  <span className="text-slate-300">Heart Likes per 1 HP:</span>
+                  <span className="font-fighting text-rose-400">{config.likesPerHp || 100} Likes = 1 HP</span>
+                </div>
+                <input
+                  type="range"
+                  min="10"
+                  max="1000"
+                  step="10"
+                  value={config.likesPerHp || 100}
+                  onChange={(e) => onUpdateConfig({ likesPerHp: parseInt(e.target.value) })}
+                  className="w-full accent-rose-400 cursor-pointer"
+                />
+                <p className="text-[11px] text-slate-400 mt-1">
+                  Default: 100 Likes. Challengers' {config.likesPerHp || 100} likes decrease Defender HP by -1. Only the Defender's own {config.likesPerHp || 100} likes increase her HP by +1.
                 </p>
               </div>
             </div>

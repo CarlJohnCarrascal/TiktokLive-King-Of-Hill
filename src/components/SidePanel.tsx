@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AttackerRecord, LeaderboardStats } from '../game/rules';
 import { Swords, Trophy, Clock, Skull, Heart } from 'lucide-react';
 
@@ -11,12 +11,57 @@ interface SidePanelProps {
   orientation?: 'landscape' | 'portrait';
 }
 
+const RECENT_ATTACKS_DURATION_MS = 60000; // 1 minute for Last Gift & Recent Attacks
+const HALL_OF_FAME_DURATION_MS = 5000;    // 5 seconds for Hall of Fame
+
 export const SidePanel: React.FC<SidePanelProps> = ({
   lastAttackers,
   leaderboards,
   orientation = 'landscape'
 }) => {
-  const [activeTab, setActiveTab] = useState<'activity' | 'leaderboard'>('activity');
+  const [activeSlide, setActiveSlide] = useState<0 | 1>(0);
+  const [maxDisplayItems, setMaxDisplayItems] = useState(5);
+
+  // Dynamically calculate how many gifters/hall of fame entries to render based on device/window height
+  useEffect(() => {
+    const calculateCapacity = () => {
+      const windowHeight = window.innerHeight;
+      // On standard 1080p, OBS landscape, or tall phone portrait:
+      // < 600px: 4-5 items
+      // 600-800px: 6-7 items
+      // 800-1000px: 8-10 items
+      // > 1000px (e.g. 1080x1920 mobile OBS portrait or 2K displays): 12-15 items
+      if (windowHeight > 1300) {
+        setMaxDisplayItems(16);
+      } else if (windowHeight > 1000) {
+        setMaxDisplayItems(12);
+      } else if (windowHeight > 850) {
+        setMaxDisplayItems(9);
+      } else if (windowHeight > 700) {
+        setMaxDisplayItems(7);
+      } else if (windowHeight > 550) {
+        setMaxDisplayItems(5);
+      } else {
+        setMaxDisplayItems(4);
+      }
+    };
+
+    calculateCapacity();
+    window.addEventListener('resize', calculateCapacity);
+    return () => window.removeEventListener('resize', calculateCapacity);
+  }, []);
+
+  // Automatically switch carousel slides:
+  // - Slide 0 ("Last Gift & Recent Attacks") stays for 1 minute (60,000ms)
+  // - Slide 1 ("Hall of Fame") stays for 5 seconds (5,000ms)
+  useEffect(() => {
+    const duration = activeSlide === 0 ? RECENT_ATTACKS_DURATION_MS : HALL_OF_FAME_DURATION_MS;
+    const timer = setTimeout(() => {
+      setActiveSlide((prev) => (prev === 0 ? 1 : 0));
+    }, duration);
+
+    return () => clearTimeout(timer);
+  }, [activeSlide]);
 
   const formatReignTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -24,36 +69,50 @@ export const SidePanel: React.FC<SidePanelProps> = ({
     return `${mins}m ${secs}s`;
   };
 
-  const renderRecentGifts = () => (
-    <div>
-      <div className="flex items-center justify-between text-[11px] font-condensed tracking-wider text-slate-400 uppercase mb-2 px-1">
-        <span className="flex items-center gap-1.5 font-fighting text-amber-300">
-          <Swords className="w-3.5 h-3.5" />
-          <span>Last 5 Gifts</span>
-        </span>
-        <span>Impact</span>
-      </div>
+  // Ensure no duplicate gift records are ever rendered
+  const uniqueAttackers = lastAttackers.filter((atk, index, self) => {
+    return (
+      index ===
+      self.findIndex(
+        (t) =>
+          t.id === atk.id ||
+          (t.eventId && atk.eventId && t.eventId === atk.eventId) ||
+          (t.streakKey &&
+            atk.streakKey &&
+            t.streakKey === atk.streakKey &&
+            Math.abs(t.timestamp - atk.timestamp) < 15000) ||
+          (t.userId === atk.userId &&
+            t.giftName === atk.giftName &&
+            t.coins === atk.coins &&
+            Math.abs(t.timestamp - atk.timestamp) < 2500)
+      )
+    );
+  });
 
-      {lastAttackers.length === 0 ? (
-        <div className="py-6 text-center text-xs text-slate-400 italic">
-          No attacks yet. Awaiting challengers!
+  const renderRecentGiftsSlide = () => (
+    <div className="animate-fade-in">
+      {uniqueAttackers.length === 0 ? (
+        <div className="py-5 text-center text-xs text-slate-400 italic">
+          No gifts yet. Awaiting challengers!
         </div>
       ) : (
-        <div className="space-y-1.5">
-          {lastAttackers.slice(0, 5).map((atk) => (
+        <div className="space-y-1 overflow-y-auto max-h-[calc(100vh-340px)] pr-0.5">
+          {uniqueAttackers.slice(0, maxDisplayItems).map((atk, idx) => (
             <div
               key={atk.id}
-              className={`flex items-center justify-between gap-2.5 p-2 rounded-xl border text-xs transition-all ${
+              className={`flex items-center justify-between gap-2.5 px-2.5 py-1 rounded-xl border text-xs transition-all ${
                 atk.isKo
                   ? 'bg-red-950/40 border-red-500/50 text-red-200'
                   : atk.isHeal
                   ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
+                  : idx === 0
+                  ? 'bg-amber-950/30 border-amber-500/50 text-white'
                   : 'bg-slate-900/70 border-slate-800 text-slate-200'
               }`}
             >
               {/* User Avatar & Gift Details */}
               <div className="flex items-center gap-2 min-w-0">
-                <div className="relative w-8 h-8 rounded-lg overflow-hidden shrink-0 border border-slate-700 bg-slate-800">
+                <div className="relative w-6 h-6 rounded-lg overflow-hidden shrink-0 border border-slate-700 bg-slate-800">
                   <img
                     src={atk.profilePictureUrl}
                     alt={atk.nickname}
@@ -64,11 +123,19 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                   />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-semibold text-white truncate max-w-[130px] text-xs">
-                    {atk.nickname}
-                  </p>
-                  <p className="text-[10px] text-slate-400 truncate">
-                    {atk.repeatCount > 1 ? `${atk.repeatCount}x ` : ''}{atk.giftName} ({atk.coins.toLocaleString()} coins)
+                  <div className="flex items-center gap-1.5">
+                    <p className="font-semibold text-white truncate max-w-[140px] text-xs leading-tight">
+                      {atk.nickname}
+                    </p>
+                    {idx === 0 && (
+                      <span className="px-1.5 py-0.2 rounded bg-amber-500/20 border border-amber-400/40 text-[9px] font-fighting text-amber-300 uppercase">
+                        LAST GIFT
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[10px] text-slate-400 truncate leading-tight">
+                    {atk.repeatCount > 1 ? `${atk.repeatCount}x ` : ''}
+                    {atk.giftName} ({atk.coins.toLocaleString()} {atk.coins === 1 ? 'coin' : 'coins'})
                   </p>
                 </div>
               </div>
@@ -98,129 +165,123 @@ export const SidePanel: React.FC<SidePanelProps> = ({
     </div>
   );
 
-  const renderLeaderboards = () => (
-    <div className="space-y-3">
-      {/* Top Knockouts */}
-      <div>
-        <div className="flex items-center gap-1.5 text-xs font-fighting text-amber-300 uppercase mb-2">
-          <Skull className="w-3.5 h-3.5 text-red-400" />
-          <span>Most Knockouts</span>
+  const renderHallOfFameSlide = () => (
+    <div className="animate-fade-in">
+      {leaderboards.longestReigns.length === 0 ? (
+        <div className="py-5 text-center text-xs text-slate-400 italic">
+          No reigns recorded yet. Defend the throne to enter the Hall of Fame!
         </div>
-        {leaderboards.mostKnockouts.length === 0 ? (
-          <p className="text-[11px] text-slate-400 italic">No KOs recorded yet.</p>
-        ) : (
-          <div className="space-y-1.5">
-            {leaderboards.mostKnockouts.slice(0, 3).map((item, idx) => (
-              <div
-                key={item.userId}
-                className="flex items-center justify-between text-xs p-1.5 rounded-lg bg-slate-900/60 border border-slate-800"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="font-fighting text-xs text-amber-400 w-4 text-center">
-                    #{idx + 1}
-                  </span>
-                  <span className="font-medium text-white truncate max-w-[120px]">
-                    {item.nickname}
-                  </span>
+      ) : (
+        <div className="space-y-1 overflow-y-auto max-h-[calc(100vh-340px)] pr-0.5">
+          {leaderboards.longestReigns.slice(0, maxDisplayItems).map((item, idx) => (
+            <div
+              key={item.userId}
+              className={`flex items-center justify-between text-xs px-2.5 py-1 rounded-xl border ${
+                idx === 0
+                  ? 'bg-amber-950/30 border-amber-500/50 text-white'
+                  : 'bg-slate-900/70 border-slate-800 text-slate-200'
+              }`}
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span
+                  className={`font-fighting text-xs w-5 text-center ${
+                    idx === 0
+                      ? 'text-yellow-400'
+                      : idx === 1
+                      ? 'text-slate-300'
+                      : idx === 2
+                      ? 'text-amber-600'
+                      : 'text-slate-500'
+                  }`}
+                >
+                  #{idx + 1}
+                </span>
+                <div className="relative w-6 h-6 rounded-lg overflow-hidden shrink-0 border border-slate-700 bg-slate-800">
+                  <img
+                    src={item.profilePictureUrl}
+                    alt={item.nickname}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(item.nickname)}`;
+                    }}
+                  />
                 </div>
-                <span className="font-fighting text-red-400 text-xs">
-                  {item.knockouts} KOs
+                <span className="font-semibold text-white truncate max-w-[160px]">
+                  {item.nickname}
                 </span>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Longest Reign */}
-      <div>
-        <div className="flex items-center gap-1.5 text-xs font-fighting text-amber-300 uppercase mb-2">
-          <Clock className="w-3.5 h-3.5 text-yellow-400" />
-          <span>Longest Reign</span>
+              <span className="font-fighting text-emerald-400 text-xs shrink-0">
+                {formatReignTime(item.longestReignSeconds)}
+              </span>
+            </div>
+          ))}
         </div>
-        {leaderboards.longestReigns.length === 0 ? (
-          <p className="text-[11px] text-slate-400 italic">No reigns recorded yet.</p>
-        ) : (
-          <div className="space-y-1.5">
-            {leaderboards.longestReigns.slice(0, 3).map((item, idx) => (
-              <div
-                key={item.userId}
-                className="flex items-center justify-between text-xs p-1.5 rounded-lg bg-slate-900/60 border border-slate-800"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="font-fighting text-xs text-amber-400 w-4 text-center">
-                    #{idx + 1}
-                  </span>
-                  <span className="font-medium text-white truncate max-w-[120px]">
-                    {item.nickname}
-                  </span>
-                </div>
-                <span className="font-fighting text-emerald-400 text-xs">
-                  {formatReignTime(item.longestReignSeconds)}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 
   return (
     <div
-      className={`relative rounded-2xl overflow-hidden border border-slate-700/80 bg-slate-950/85 backdrop-blur-md shadow-xl text-white transition-all w-full max-w-3xl mx-auto`}
+      className={`relative rounded-2xl overflow-hidden border border-slate-700/80 bg-slate-950/85 backdrop-blur-md shadow-xl text-white transition-all w-full ${
+        orientation === 'portrait' ? 'max-w-md mx-auto' : 'max-w-3xl mx-auto'
+      }`}
     >
-      {/* In Landscape: Dual columns side-by-side underneath the defender card */}
-      {orientation === 'landscape' ? (
-        <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="border-b md:border-b-0 md:border-r border-slate-800 pb-3 md:pb-0 md:pr-4">
-            {renderRecentGifts()}
-          </div>
-          <div className="md:pl-1">
-            <div className="flex items-center justify-between text-[11px] font-condensed tracking-wider text-slate-400 uppercase mb-2 px-1">
-              <span className="flex items-center gap-1.5 font-fighting text-amber-300">
-                <Trophy className="w-3.5 h-3.5 text-yellow-400" />
-                <span>Hall of Fame</span>
-              </span>
-              <span>Records</span>
-            </div>
-            {renderLeaderboards()}
-          </div>
-        </div>
-      ) : (
-        /* In Portrait: Tabbed switch underneath defender card */
-        <div>
-          <div className="flex border-b border-slate-800 bg-slate-900/60 p-1">
-            <button
-              onClick={() => setActiveTab('activity')}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-fighting uppercase tracking-wider transition-all ${
-                activeTab === 'activity'
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Swords className="w-3.5 h-3.5" />
-              <span>Last 5 Gifts</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('leaderboard')}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-fighting uppercase tracking-wider transition-all ${
-                activeTab === 'leaderboard'
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
+      {/* Single Active Title Header + Carousel Indicators */}
+      <div className="flex items-center justify-between border-b border-slate-800/90 bg-slate-900/70 px-3.5 py-2">
+        <button
+          onClick={() => setActiveSlide((prev) => (prev === 0 ? 1 : 0))}
+          className="flex items-center gap-2 text-xs font-fighting uppercase tracking-wider text-amber-300 hover:text-amber-200 transition-colors"
+          title="Click to switch view"
+        >
+          {activeSlide === 0 ? (
+            <>
+              <Swords className="w-3.5 h-3.5 text-amber-400" />
+              <span>Last Gift & Recent Attacks</span>
+            </>
+          ) : (
+            <>
               <Trophy className="w-3.5 h-3.5 text-yellow-400" />
-              <span>Hall of Fame</span>
-            </button>
-          </div>
+              <span>Hall of Fame • Longest Reign</span>
+            </>
+          )}
+        </button>
 
-          <div className="p-3">
-            {activeTab === 'activity' ? renderRecentGifts() : renderLeaderboards()}
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] font-condensed tracking-wider text-slate-400 uppercase flex items-center gap-1">
+            {activeSlide === 0 ? (
+              <span>Impact</span>
+            ) : (
+              <>
+                <Clock className="w-3 h-3 text-yellow-400/90" />
+                <span className="text-yellow-400/90">Time on Stage</span>
+              </>
+            )}
+          </span>
+
+          {/* Carousel Dots */}
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setActiveSlide(0)}
+              aria-label="Slide 1: Last Gift"
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                activeSlide === 0 ? 'w-4 bg-amber-400' : 'w-1.5 bg-slate-600'
+              }`}
+            />
+            <button
+              onClick={() => setActiveSlide(1)}
+              aria-label="Slide 2: Hall of Fame"
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                activeSlide === 1 ? 'w-4 bg-amber-400' : 'w-1.5 bg-slate-600'
+              }`}
+            />
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Carousel Body */}
+      <div className="p-3">
+        {activeSlide === 0 ? renderRecentGiftsSlide() : renderHallOfFameSlide()}
+      </div>
     </div>
   );
 };

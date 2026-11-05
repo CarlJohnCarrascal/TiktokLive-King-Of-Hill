@@ -4,12 +4,14 @@ import { ChampionCard } from './ChampionCard';
 import { TakeoverBanner } from './TakeoverBanner';
 import { SidePanel } from './SidePanel';
 import { FloatingCombatText, FloatingItem } from './FloatingCombatText';
+import { RocketGiftItem, RocketGiftLayer } from './RocketGiftLayer';
 import { Radio, Wifi, WifiOff, Volume2, VolumeX, Terminal, Shield } from 'lucide-react';
 
 interface OverlayViewProps {
   gameState: GameState;
   config: GameConfig;
   floatingItems: FloatingItem[];
+  rocketGifts?: RocketGiftItem[];
   isHit: boolean;
   isHealed: boolean;
   takeoverInfo: {
@@ -24,18 +26,21 @@ interface OverlayViewProps {
   };
   onClearTakeover: () => void;
   orientation?: 'landscape' | 'portrait';
+  isFullOverlay?: boolean;
 }
 
 export const OverlayView: React.FC<OverlayViewProps> = ({
   gameState,
   config,
   floatingItems,
+  rocketGifts = [],
   isHit,
   isHealed,
   takeoverInfo,
   tiktokStatus,
   onClearTakeover,
-  orientation: propOrientation
+  orientation: propOrientation,
+  isFullOverlay = false
 }) => {
   const [showDebug, setShowDebug] = useState(false);
   const orientation = propOrientation || config.orientation || 'landscape';
@@ -52,8 +57,14 @@ export const OverlayView: React.FC<OverlayViewProps> = ({
   }, []);
 
   return (
-    <div className="relative w-full min-h-screen bg-transparent p-4 md:p-6 overflow-hidden flex flex-col justify-start">
-      
+    <div
+      className={`relative w-full bg-transparent overflow-hidden flex flex-col justify-start ${
+        isFullOverlay ? 'h-screen max-h-screen p-2.5 md:p-4' : 'p-2 md:p-3'
+      }`}
+    >
+      {/* Rocketing gifts flying straight to defender */}
+      <RocketGiftLayer rockets={rocketGifts} />
+
       {/* Floating combat damage / heal popups */}
       <FloatingCombatText items={floatingItems} />
 
@@ -67,27 +78,35 @@ export const OverlayView: React.FC<OverlayViewProps> = ({
         />
       )}
 
-      {/* Main Overlay Layout: Defender Panel on top, Last Gift & Hall of Fame below */}
-      <div className={`w-full mx-auto flex flex-col items-center gap-3 pt-3 transition-all ${
-        orientation === 'portrait' ? 'max-w-[480px]' : 'max-w-3xl'
-      }`}>
-        
+      {/* Main Overlay Layout: Defender Panel on top, Carousel (Last Gift & Hall of Fame) below */}
+      <div
+        className={`w-full mx-auto flex flex-col items-center gap-2.5 transition-all ${
+          orientation === 'portrait' ? 'max-w-[480px]' : 'max-w-3xl'
+        }`}
+      >
         {/* Primary Focus: King / Defender Card */}
-        <div className="w-full">
+        <div className="w-full shrink-0">
           <ChampionCard
             king={gameState.currentKing}
+            winStreak={
+              gameState.currentKing?.winStreak ??
+              gameState.currentKing?.knockouts ??
+              gameState.currentWinStreak ??
+              0
+            }
             isHit={isHit}
             isHealed={isHealed}
             theme={config.theme}
             orientation={orientation}
             likesPool={gameState.likesPool}
+            defenderLikesPool={gameState.defenderLikesPool || 0}
             totalLikes={gameState.totalRoomLikes}
-            likesPerHp={config.likesPerHp || 1000}
+            likesPerHp={config.likesPerHp || 100}
           />
         </div>
 
-        {/* Supporting Panel: Recent Activity & Leaderboard placed BELOW Defender */}
-        <div className="w-full">
+        {/* Supporting Panel: Auto-switching Carousel (Recent Activity & Hall of Fame) placed BELOW Defender */}
+        <div className="w-full shrink-0">
           <SidePanel
             lastAttackers={gameState.lastAttackers}
             leaderboards={gameState.leaderboard}
@@ -96,8 +115,10 @@ export const OverlayView: React.FC<OverlayViewProps> = ({
         </div>
       </div>
 
-      {/* Hidden / Discreet Debug Status Indicator (bottom right corner) */}
-      <div className="fixed bottom-3 right-3 z-30">
+      {/* Discreet Debug Status Indicator (bottom right corner - auto-dimmed in Full Overlay unless hovered) */}
+      <div className={`fixed bottom-2.5 right-2.5 z-30 transition-opacity duration-300 ${
+        isFullOverlay && !showDebug ? 'opacity-0 hover:opacity-100' : 'opacity-100'
+      }`}>
         <button
           onClick={() => setShowDebug(!showDebug)}
           className="group flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md border border-slate-700/60 text-[11px] text-slate-400 hover:text-white transition-all shadow-md"

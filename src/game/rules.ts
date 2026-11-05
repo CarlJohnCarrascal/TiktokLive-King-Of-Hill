@@ -2,28 +2,31 @@
  * =========================================================================
  * 👑 KING OF THE HILL - HP RULES & GAME LOGIC ENGINE
  * =========================================================================
- * 
+ *
  * Welcome streamer / developer!
  * All King of the Hill game mechanics, combat math, and stage rules are
  * defined right here in this clearly labeled file.
- * 
+ *
  * CORE RULES OVERVIEW:
  * 1. HP Value:
  *    Calculated from gift coins * hpMultiplier (e.g., 1 Rose = 1 coin = 1 HP).
  * 2. Stage Empty:
  *    First gifter claims the crown immediately with starting HP = their gift value.
  * 3. Attack (Challengers):
- *    Any gift from a different viewer deals damage equal to its coin value.
+ *    - Any gift from a different viewer deals damage equal to its coin value.
+ *    - Every 100 heart likes from other viewers decreases the Defender's HP by 1 (-1 HP).
  * 4. Knockout & Takeover:
- *    When HP <= 0, the current King is knocked out.
+ *    When HP <= 0, the current Defender is knocked out.
  *    The attacker takes the stage, and leftover damage becomes their starting HP!
  *    (Zero wasted coins). If leftover is 0, a safe minimum HP is granted.
- * 5. Heal (King's Reinforcements):
- *    If the reigning King sends another gift, it heals them up to MAX_HP.
+ * 5. Heal (Current Defender Only):
+ *    ONLY if the current Defender sends a gift OR sends 100 heart likes will it
+ *    increase (heal) her own HP (capped at MAX_HP).
  * 6. Decay (Optional):
  *    Slowly drains HP over time to keep the stream dynamic when chat is quiet.
- * 7. Anti-Streak Double Counting:
- *    Gifts are processed on final streak completion to ensure 100% fair coin tallies.
+ * 7. Anti-Streak Double Counting & Gift Deduplication:
+ *    Gifts are processed on final streak completion and deduplicated by eventId/streakKey
+ *    so the Last 5 Gifts list never duplicates a single gift.
  */
 
 export interface GameConfig {
@@ -38,7 +41,7 @@ export interface GameConfig {
   soundVolume: number;
   theme: string;
   orientation: 'landscape' | 'portrait';
-  likesPerHp: number; // Every 1000 likes = +1 HP (configurable)
+  likesPerHp: number; // Default 100: every 100 heart likes = -1 HP (attackers) or +1 HP (current defender)
 }
 
 export interface King {
@@ -50,6 +53,7 @@ export interface King {
   startingHp: number;
   reignStartedAt: number;
   knockouts: number;
+  winStreak: number;
   totalDamageTaken: number;
   totalHealed: number;
   likesGainedHp: number;
@@ -58,6 +62,8 @@ export interface King {
 
 export interface AttackerRecord {
   id: string;
+  eventId?: string;
+  streakKey?: string;
   userId: string;
   nickname: string;
   profilePictureUrl: string;
@@ -82,6 +88,8 @@ export interface LeaderboardStats {
 
 export interface GameState {
   currentKing: King | null;
+  currentWinStreak: number;
+  userWinStreaks: Record<string, number>;
   lastAttackers: AttackerRecord[];
   leaderboard: {
     mostKnockouts: LeaderboardStats[];
@@ -90,12 +98,14 @@ export interface GameState {
   totalBattles: number;
   totalGiftsReceived: number;
   totalCoinsContributed: number;
-  likesPool: number; // accumulated likes toward next HP (0 to 999)
-  totalRoomLikes: number; // lifetime room heart likes
+  likesPool: number; // Challenger likes accumulated toward next -1 HP attack (0 to 99)
+  defenderLikesPool: number; // Current Defender's own likes accumulated toward next +1 HP heal (0 to 99)
+  totalRoomLikes: number; // Lifetime room heart likes
+  processedEventIds: string[]; // Recent processed eventIds to prevent duplicate gifts/likes
   lastEventTimestamp: number;
 }
 
-export type CombatEventType = 'FIRST_KING' | 'HEAL' | 'HIT' | 'TAKEOVER';
+export type CombatEventType = 'FIRST_KING' | 'HEAL' | 'HIT' | 'TAKEOVER' | 'DUPLICATE';
 
 export interface CombatResult {
   eventType: CombatEventType;
@@ -116,6 +126,8 @@ export interface CombatResult {
 
 export const initialGameState: GameState = {
   currentKing: null,
+  currentWinStreak: 0,
+  userWinStreaks: {},
   lastAttackers: [],
   leaderboard: {
     mostKnockouts: [],
@@ -125,9 +137,62 @@ export const initialGameState: GameState = {
   totalGiftsReceived: 0,
   totalCoinsContributed: 0,
   likesPool: 0,
+  defenderLikesPool: 0,
   totalRoomLikes: 0,
+  processedEventIds: [],
   lastEventTimestamp: Date.now()
 };
+
+const GENERIC_NAMES = new Set([
+  'mystery gifter',
+  'viewer',
+  'anonymous',
+  'testgifter',
+  'heartgiver',
+  'heartchallenger',
+  ''
+]);
+
+/**
+ * Strictly checks if an incoming Gift or Like belongs to the Current Defender (King).
+ * Ignores protobuf default '0' IDs so other viewers are NEVER mistaken for the Defender.
+ */
+export function isSameUserAsKing(
+  king: King | null,
+  actor: { userId?: string; nickname?: string }
+): boolean {
+  if (!king) return false;
+
+  const kingId = (king.userId || '').trim();
+  const actorId = (actor.userId || '').trim();
+
+  const isRealId = (id: string) =>
+    id !== '' &&
+    id !== '0' &&
+    id !== 'anonymous' &&
+    !id.startsWith('anon_') &&
+    !id.startsWith('custom_') &&
+    !id.startsWith('liker_');
+
+  if (kingId && actorId && kingId !== '0' && actorId !== '0' && kingId === actorId) {
+    return true;
+  }
+
+  // If both have distinct real TikTok user IDs, they are definitely different users
+  if (isRealId(kingId) && isRealId(actorId) && kingId !== actorId) {
+    return false;
+  }
+
+  // Fallback to nickname match only if nickname is specific (not generic placeholder)
+  const kingNick = (king.nickname || '').trim().toLowerCase();
+  const actorNick = (actor.nickname || '').trim().toLowerCase();
+
+  if (kingNick && actorNick && !GENERIC_NAMES.has(kingNick) && !GENERIC_NAMES.has(actorNick)) {
+    return kingNick === actorNick;
+  }
+
+  return false;
+}
 
 /**
  * Determine crown tier based on number of knockouts defended
@@ -140,13 +205,41 @@ export function calculateCrownTier(knockouts: number): 'bronze' | 'silver' | 'go
 }
 
 /**
+ * Helper to insert an AttackerRecord into Last 5 Gifts without duplicates
+ */
+function upsertLastAttackers(
+  currentList: AttackerRecord[],
+  newRecord: AttackerRecord
+): AttackerRecord[] {
+  const now = newRecord.timestamp || Date.now();
+  const filtered = currentList.filter((item) => {
+    if (newRecord.eventId && item.eventId && item.eventId === newRecord.eventId) {
+      return false;
+    }
+    if (
+      newRecord.streakKey &&
+      item.streakKey &&
+      item.streakKey === newRecord.streakKey &&
+      now - item.timestamp < 15000
+    ) {
+      return false;
+    }
+    return true;
+  });
+
+  return [newRecord, ...filtered].slice(0, 25);
+}
+
+/**
  * =========================================================================
- * CORE COMBAT LOGIC
+ * CORE COMBAT LOGIC (GIFTS)
  * =========================================================================
  */
 export function processGiftAction(
   currentState: GameState,
   gift: {
+    eventId?: string;
+    streakKey?: string;
     userId: string;
     nickname: string;
     profilePictureUrl: string;
@@ -157,6 +250,66 @@ export function processGiftAction(
   },
   config: GameConfig
 ): { nextState: GameState; result: CombatResult } {
+  const now = Date.now();
+  const prevProcessed = currentState.processedEventIds || [];
+
+  // Deduplicate by eventId so the same gift is never processed more than once
+  if (gift.eventId && prevProcessed.includes(gift.eventId)) {
+    return {
+      nextState: currentState,
+      result: {
+        eventType: 'DUPLICATE',
+        damageDealt: 0,
+        healedAmount: 0,
+        leftoverHp: 0,
+        defeatedKing: null,
+        newKing: null,
+        gift: {
+          userId: gift.userId,
+          nickname: gift.nickname,
+          profilePictureUrl: gift.profilePictureUrl,
+          giftName: gift.giftName,
+          coins: gift.coins,
+          repeatCount: gift.repeatCount
+        }
+      }
+    };
+  }
+
+  // Also guard against duplicate streak packets arriving within 2 seconds for the exact same streakKey & repeatCount
+  const latestAttacker = currentState.lastAttackers[0];
+  if (
+    latestAttacker &&
+    gift.streakKey &&
+    latestAttacker.streakKey === gift.streakKey &&
+    latestAttacker.repeatCount === gift.repeatCount &&
+    now - latestAttacker.timestamp < 10000
+  ) {
+    return {
+      nextState: currentState,
+      result: {
+        eventType: 'DUPLICATE',
+        damageDealt: 0,
+        healedAmount: 0,
+        leftoverHp: 0,
+        defeatedKing: null,
+        newKing: null,
+        gift: {
+          userId: gift.userId,
+          nickname: gift.nickname,
+          profilePictureUrl: gift.profilePictureUrl,
+          giftName: gift.giftName,
+          coins: gift.coins,
+          repeatCount: gift.repeatCount
+        }
+      }
+    };
+  }
+
+  const nextProcessedIds = gift.eventId
+    ? [...prevProcessed.slice(-60), gift.eventId]
+    : prevProcessed;
+
   // 1. Calculate HP value based on coins and multiplier
   const multiplier = Math.max(0.1, config.hpMultiplier || 1);
   const hpValue = Math.max(1, Math.round(gift.coins * multiplier));
@@ -166,9 +319,10 @@ export function processGiftAction(
   const updatedTotalGifts = currentState.totalGiftsReceived + 1;
   const updatedTotalCoins = currentState.totalCoinsContributed + gift.coins;
 
-  // RULE 2: If nobody is on stage, the first gifter becomes the King!
+  // RULE 2: If nobody is on stage, the first gifter becomes the Defender (King)!
   if (!currentState.currentKing) {
     const startingHp = Math.min(Math.max(hpValue, minStartingHp), maxHp);
+    const existingStreak = (currentState.userWinStreaks || {})[gift.userId] || 0;
     const newKing: King = {
       userId: gift.userId,
       nickname: gift.nickname,
@@ -176,16 +330,19 @@ export function processGiftAction(
       currentHp: startingHp,
       maxHp: startingHp,
       startingHp,
-      reignStartedAt: Date.now(),
-      knockouts: 0,
+      reignStartedAt: now,
+      knockouts: existingStreak,
+      winStreak: existingStreak,
       totalDamageTaken: 0,
       totalHealed: 0,
       likesGainedHp: 0,
-      crownTier: 'bronze'
+      crownTier: calculateCrownTier(existingStreak)
     };
 
     const attackerRecord: AttackerRecord = {
-      id: `attack_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      id: `attack_${now}_${Math.random().toString(36).substring(2, 7)}`,
+      eventId: gift.eventId,
+      streakKey: gift.streakKey,
       userId: gift.userId,
       nickname: gift.nickname,
       profilePictureUrl: gift.profilePictureUrl,
@@ -196,17 +353,21 @@ export function processGiftAction(
       hpEffect: startingHp,
       isHeal: false,
       isKo: false,
-      timestamp: Date.now()
+      timestamp: now
     };
 
     const nextState: GameState = {
       ...currentState,
       currentKing: newKing,
-      lastAttackers: [attackerRecord, ...currentState.lastAttackers.slice(0, 4)],
+      currentWinStreak: existingStreak,
+      lastAttackers: upsertLastAttackers(currentState.lastAttackers, attackerRecord),
       totalBattles: currentState.totalBattles + 1,
       totalGiftsReceived: updatedTotalGifts,
       totalCoinsContributed: updatedTotalCoins,
-      lastEventTimestamp: Date.now()
+      likesPool: 0,
+      defenderLikesPool: 0,
+      processedEventIds: nextProcessedIds,
+      lastEventTimestamp: now
     };
 
     return {
@@ -230,18 +391,14 @@ export function processGiftAction(
     };
   }
 
-  const currentKing = { ...currentState.currentKing };
+  const currentKing: King = {
+    ...currentState.currentKing,
+    winStreak: currentState.currentKing.winStreak ?? currentState.currentKing.knockouts ?? 0
+  };
 
-  // RULE 5: ONLY if the reigning King THEMSELVES sends another gift, it HEALS them!
-  // Any other challenger's gift MUST ATTACK and subtract HP (deal damage).
-  const isKingSendingGift = Boolean(
-    gift.userId &&
-    currentKing.userId &&
-    gift.userId !== 'anonymous' &&
-    currentKing.userId !== 'anonymous' &&
-    (gift.userId === currentKing.userId ||
-     (gift.nickname && currentKing.nickname && gift.nickname.trim().toLowerCase() === currentKing.nickname.trim().toLowerCase()))
-  );
+  // RULE 5: ONLY if the current Defender HERSELF sends another gift, it HEALS her!
+  // Any other viewer's gift MUST ATTACK and subtract HP (deal damage).
+  const isKingSendingGift = isSameUserAsKing(currentKing, gift);
 
   if (isKingSendingGift) {
     const oldHp = currentKing.currentHp;
@@ -253,7 +410,9 @@ export function processGiftAction(
     currentKing.totalHealed += actualHealed;
 
     const attackerRecord: AttackerRecord = {
-      id: `heal_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      id: `heal_${now}_${Math.random().toString(36).substring(2, 7)}`,
+      eventId: gift.eventId,
+      streakKey: gift.streakKey,
       userId: gift.userId,
       nickname: gift.nickname,
       profilePictureUrl: gift.profilePictureUrl,
@@ -264,16 +423,18 @@ export function processGiftAction(
       hpEffect: actualHealed,
       isHeal: true,
       isKo: false,
-      timestamp: Date.now()
+      timestamp: now
     };
 
     const nextState: GameState = {
       ...currentState,
       currentKing,
-      lastAttackers: [attackerRecord, ...currentState.lastAttackers.slice(0, 4)],
+      currentWinStreak: currentKing.winStreak,
+      lastAttackers: upsertLastAttackers(currentState.lastAttackers, attackerRecord),
       totalGiftsReceived: updatedTotalGifts,
       totalCoinsContributed: updatedTotalCoins,
-      lastEventTimestamp: Date.now()
+      processedEventIds: nextProcessedIds,
+      lastEventTimestamp: now
     };
 
     return {
@@ -297,17 +458,29 @@ export function processGiftAction(
     };
   }
 
-  // RULE 3 & 4: Different user sends a gift (ATTACK)
+  // RULE 3 & 4: Different user sends a gift (ATTACK - decreases Defender's health)
   const damageDealt = hpValue;
   const remainingHp = currentKing.currentHp - damageDealt;
 
-  // Case A: King survives the attack!
+  // Case A: Defender survives and knocks back the challenger's attack!
   if (remainingHp > 0) {
+    const updatedStreak = (currentKing.winStreak || 0) + 1;
     currentKing.currentHp = remainingHp;
     currentKing.totalDamageTaken += damageDealt;
+    currentKing.knockouts = updatedStreak;
+    currentKing.winStreak = updatedStreak;
+    currentKing.crownTier = calculateCrownTier(updatedStreak);
+
+    const updatedUserStreaks: Record<string, number> = {
+      ...(currentState.userWinStreaks || {}),
+      [currentKing.userId]: updatedStreak,
+      [gift.userId]: 0
+    };
 
     const attackerRecord: AttackerRecord = {
-      id: `hit_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      id: `hit_${now}_${Math.random().toString(36).substring(2, 7)}`,
+      eventId: gift.eventId,
+      streakKey: gift.streakKey,
       userId: gift.userId,
       nickname: gift.nickname,
       profilePictureUrl: gift.profilePictureUrl,
@@ -318,16 +491,19 @@ export function processGiftAction(
       hpEffect: -damageDealt,
       isHeal: false,
       isKo: false,
-      timestamp: Date.now()
+      timestamp: now
     };
 
     const nextState: GameState = {
       ...currentState,
       currentKing,
-      lastAttackers: [attackerRecord, ...currentState.lastAttackers.slice(0, 4)],
+      currentWinStreak: updatedStreak,
+      userWinStreaks: updatedUserStreaks,
+      lastAttackers: upsertLastAttackers(currentState.lastAttackers, attackerRecord),
       totalGiftsReceived: updatedTotalGifts,
       totalCoinsContributed: updatedTotalCoins,
-      lastEventTimestamp: Date.now()
+      processedEventIds: nextProcessedIds,
+      lastEventTimestamp: now
     };
 
     return {
@@ -359,21 +535,30 @@ export function processGiftAction(
     maxHp
   );
 
-  // Defeated King stats finalized
-  const reignDurationSeconds = Math.max(1, Math.round((Date.now() - currentKing.reignStartedAt) / 1000));
+  // Defeated Defender stats finalized
+  const reignDurationSeconds = Math.max(1, Math.round((now - currentKing.reignStartedAt) / 1000));
   const defeatedKing: King = {
     ...currentKing,
     currentHp: 0
   };
 
-  // Update Leaderboards with defeated king's reign
+  // Update Leaderboards with defeated defender's reign
   const updatedLeaderboards = updateLeaderboards(
     currentState.leaderboard,
     defeatedKing,
     reignDurationSeconds
   );
 
-  // New King takes the stage!
+  // Attacker scored a Knockout! Increment their consecutive KO streak and reset defeated King's streak
+  const prevAttackerStreak = (currentState.userWinStreaks || {})[gift.userId] || 0;
+  const newKingStreak = prevAttackerStreak + 1;
+  const updatedUserStreaks: Record<string, number> = {
+    ...(currentState.userWinStreaks || {}),
+    [currentKing.userId]: 0,
+    [gift.userId]: newKingStreak
+  };
+
+  // New Defender takes the stage!
   const newKing: King = {
     userId: gift.userId,
     nickname: gift.nickname,
@@ -381,16 +566,19 @@ export function processGiftAction(
     currentHp: startingHp,
     maxHp: startingHp,
     startingHp,
-    reignStartedAt: Date.now(),
-    knockouts: 0,
+    reignStartedAt: now,
+    knockouts: newKingStreak,
+    winStreak: newKingStreak,
     totalDamageTaken: 0,
     totalHealed: 0,
     likesGainedHp: 0,
-    crownTier: 'bronze'
+    crownTier: calculateCrownTier(newKingStreak)
   };
 
   const attackerRecord: AttackerRecord = {
-    id: `ko_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    id: `ko_${now}_${Math.random().toString(36).substring(2, 7)}`,
+    eventId: gift.eventId,
+    streakKey: gift.streakKey,
     userId: gift.userId,
     nickname: gift.nickname,
     profilePictureUrl: gift.profilePictureUrl,
@@ -401,18 +589,23 @@ export function processGiftAction(
     hpEffect: -damageDealt,
     isHeal: false,
     isKo: true,
-    timestamp: Date.now()
+    timestamp: now
   };
 
   const nextState: GameState = {
     ...currentState,
     currentKing: newKing,
-    lastAttackers: [attackerRecord, ...currentState.lastAttackers.slice(0, 4)],
+    currentWinStreak: newKingStreak,
+    userWinStreaks: updatedUserStreaks,
+    lastAttackers: upsertLastAttackers(currentState.lastAttackers, attackerRecord),
     leaderboard: updatedLeaderboards,
     totalBattles: currentState.totalBattles + 1,
     totalGiftsReceived: updatedTotalGifts,
     totalCoinsContributed: updatedTotalCoins,
-    lastEventTimestamp: Date.now()
+    likesPool: 0,
+    defenderLikesPool: 0,
+    processedEventIds: nextProcessedIds,
+    lastEventTimestamp: now
   };
 
   return {
@@ -527,68 +720,255 @@ function updateLeaderboards(
   reignsList.sort((a, b) => b.longestReignSeconds - a.longestReignSeconds);
 
   return {
-    mostKnockouts: knockoutsList.slice(0, 5),
-    longestReigns: reignsList.slice(0, 5)
+    mostKnockouts: knockoutsList.slice(0, 25),
+    longestReigns: reignsList.slice(0, 25)
   };
 }
 
 /**
  * =========================================================================
- * RULE: Every 1,000 heart likes is equivalent to +1 HP for the reigning King!
+ * HEART LIKES COMBAT LOGIC:
+ * - Every 100 heart likes from OTHER viewers DECREASES the Defender's HP (-1 HP).
+ * - ONLY the Current Defender's own 100 heart likes INCREASES her own HP (+1 HP).
  * =========================================================================
  */
+export interface LikeActionResult {
+  nextState: GameState;
+  eventType: 'NONE' | 'LIKE_HIT' | 'LIKE_HEAL' | 'LIKE_TAKEOVER';
+  hpDelta: number; // negative when decreasing defender HP, positive when healing defender
+  damageDealt: number;
+  healedAmount: number;
+  defeatedKing: King | null;
+  newKing: King | null;
+  leftoverHp: number;
+}
+
 export function processLikeAction(
   currentState: GameState,
-  likeCount: number,
-  config: GameConfig,
-  senderName?: string
-): {
-  nextState: GameState;
-  hpGained: number;
-  newTotalLikes: number;
-  currentPool: number;
-} {
-  const addedLikes = Math.max(1, likeCount || 1);
-  const likesRequired = Math.max(1, config.likesPerHp || 1000);
+  likeData: {
+    eventId?: string;
+    userId?: string;
+    nickname?: string;
+    profilePictureUrl?: string;
+    likeCount: number;
+  },
+  config: GameConfig
+): LikeActionResult {
+  const prevProcessed = currentState.processedEventIds || [];
+  if (likeData.eventId && prevProcessed.includes(likeData.eventId)) {
+    return {
+      nextState: currentState,
+      eventType: 'NONE',
+      hpDelta: 0,
+      damageDealt: 0,
+      healedAmount: 0,
+      defeatedKing: null,
+      newKing: null,
+      leftoverHp: 0
+    };
+  }
+
+  const nextProcessedIds = likeData.eventId
+    ? [...prevProcessed.slice(-60), likeData.eventId]
+    : prevProcessed;
+
+  const addedLikes = Math.max(1, Number(likeData.likeCount) || 1);
+  const likesRequired = Math.max(1, config.likesPerHp || 100);
   const updatedTotalLikes = (currentState.totalRoomLikes || 0) + addedLikes;
-  const totalPool = (currentState.likesPool || 0) + addedLikes;
 
-  const hpGained = Math.floor(totalPool / likesRequired);
-  const remainingPool = totalPool % likesRequired;
+  // If stage is empty, just record total likes
+  if (!currentState.currentKing) {
+    return {
+      nextState: {
+        ...currentState,
+        totalRoomLikes: updatedTotalLikes,
+        processedEventIds: nextProcessedIds
+      },
+      eventType: 'NONE',
+      hpDelta: 0,
+      damageDealt: 0,
+      healedAmount: 0,
+      defeatedKing: null,
+      newKing: null,
+      leftoverHp: 0
+    };
+  }
 
-  if (hpGained > 0 && currentState.currentKing) {
-    const king = { ...currentState.currentKing };
-    const maxHp = Math.max(100, config.maxHp || 50000);
-    const oldHp = king.currentHp;
-    const newHp = Math.min(maxHp, oldHp + hpGained);
-    const actualGained = newHp - oldHp;
+  const king = { ...currentState.currentKing };
+  const maxHp = Math.max(100, config.maxHp || 50000);
+  const minStartingHp = Math.max(1, config.minStartingHp || 10);
 
-    king.currentHp = newHp;
-    king.maxHp = Math.max(king.maxHp, newHp);
-    king.likesGainedHp = (king.likesGainedHp || 0) + actualGained;
+  // Check if the heart likes came from the Current Defender herself
+  const isDefenderLiking = isSameUserAsKing(king, likeData);
+
+  // CASE 1: Current Defender's own heart likes -> INCREASE (HEAL) her own HP (+1 HP per 100 likes)
+  if (isDefenderLiking) {
+    const totalDefenderPool = (currentState.defenderLikesPool || 0) + addedLikes;
+    const hpToHeal = Math.floor(totalDefenderPool / likesRequired);
+    const remainingDefenderPool = totalDefenderPool % likesRequired;
+
+    if (hpToHeal > 0) {
+      const oldHp = king.currentHp;
+      const newHp = Math.min(maxHp, oldHp + hpToHeal);
+      const actualHealed = newHp - oldHp;
+
+      king.currentHp = newHp;
+      king.maxHp = Math.max(king.maxHp, newHp);
+      king.totalHealed += actualHealed;
+      king.likesGainedHp = (king.likesGainedHp || 0) + actualHealed;
+
+      return {
+        nextState: {
+          ...currentState,
+          currentKing: king,
+          defenderLikesPool: remainingDefenderPool,
+          totalRoomLikes: updatedTotalLikes,
+          processedEventIds: nextProcessedIds,
+          lastEventTimestamp: Date.now()
+        },
+        eventType: 'LIKE_HEAL',
+        hpDelta: actualHealed,
+        damageDealt: 0,
+        healedAmount: actualHealed,
+        defeatedKing: null,
+        newKing: king,
+        leftoverHp: 0
+      };
+    }
 
     return {
       nextState: {
         ...currentState,
-        currentKing: king,
-        likesPool: remainingPool,
+        defenderLikesPool: remainingDefenderPool,
         totalRoomLikes: updatedTotalLikes,
-        lastEventTimestamp: Date.now()
+        processedEventIds: nextProcessedIds
       },
-      hpGained: actualGained,
-      newTotalLikes: updatedTotalLikes,
-      currentPool: remainingPool
+      eventType: 'NONE',
+      hpDelta: 0,
+      damageDealt: 0,
+      healedAmount: 0,
+      defeatedKing: null,
+      newKing: null,
+      leftoverHp: 0
+    };
+  }
+
+  // CASE 2: Other viewers' (Challengers') heart likes -> DECREASE (ATTACK) Defender's HP (-1 HP per 100 likes)
+  const totalAttackPool = (currentState.likesPool || 0) + addedLikes;
+  const damageToDeal = Math.floor(totalAttackPool / likesRequired);
+  const remainingAttackPool = totalAttackPool % likesRequired;
+
+  if (damageToDeal > 0) {
+    const remainingHp = king.currentHp - damageToDeal;
+
+    // Defender survives the heart-like attack
+    if (remainingHp > 0) {
+      king.currentHp = remainingHp;
+      king.totalDamageTaken += damageToDeal;
+
+      return {
+        nextState: {
+          ...currentState,
+          currentKing: king,
+          likesPool: remainingAttackPool,
+          totalRoomLikes: updatedTotalLikes,
+          processedEventIds: nextProcessedIds,
+          lastEventTimestamp: Date.now()
+        },
+        eventType: 'LIKE_HIT',
+        hpDelta: -damageToDeal,
+        damageDealt: damageToDeal,
+        healedAmount: 0,
+        defeatedKing: null,
+        newKing: null,
+        leftoverHp: remainingHp
+      };
+    }
+
+    // Defender is knocked out by challenger's heart likes (remainingHp <= 0)
+    const now = Date.now();
+    const rawLeftover = Math.abs(remainingHp);
+    const startingHp = Math.min(Math.max(rawLeftover > 0 ? rawLeftover : 1, minStartingHp), maxHp);
+
+    const reignDurationSeconds = Math.max(1, Math.round((now - king.reignStartedAt) / 1000));
+    const defeatedKing: King = {
+      ...king,
+      currentHp: 0
+    };
+
+    const updatedLeaderboards = updateLeaderboards(
+      currentState.leaderboard,
+      defeatedKing,
+      reignDurationSeconds
+    );
+
+    const challengerName = likeData.nickname || 'Heart Challenger';
+    const challengerId = likeData.userId || `liker_${challengerName.toLowerCase()}`;
+    const challengerAvatar =
+      likeData.profilePictureUrl ||
+      `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(challengerName)}`;
+
+    const prevAttackerStreak = (currentState.userWinStreaks || {})[challengerId] || 0;
+    const newKingStreak = prevAttackerStreak + 1;
+    const updatedUserStreaks: Record<string, number> = {
+      ...(currentState.userWinStreaks || {}),
+      [king.userId]: 0,
+      [challengerId]: newKingStreak
+    };
+
+    const newKing: King = {
+      userId: challengerId,
+      nickname: challengerName,
+      profilePictureUrl: challengerAvatar,
+      currentHp: startingHp,
+      maxHp: startingHp,
+      startingHp,
+      reignStartedAt: now,
+      knockouts: newKingStreak,
+      winStreak: newKingStreak,
+      totalDamageTaken: 0,
+      totalHealed: 0,
+      likesGainedHp: 0,
+      crownTier: calculateCrownTier(newKingStreak)
+    };
+
+    return {
+      nextState: {
+        ...currentState,
+        currentKing: newKing,
+        currentWinStreak: newKingStreak,
+        userWinStreaks: updatedUserStreaks,
+        leaderboard: updatedLeaderboards,
+        totalBattles: currentState.totalBattles + 1,
+        likesPool: 0,
+        defenderLikesPool: 0,
+        totalRoomLikes: updatedTotalLikes,
+        processedEventIds: nextProcessedIds,
+        lastEventTimestamp: now
+      },
+      eventType: 'LIKE_TAKEOVER',
+      hpDelta: -damageToDeal,
+      damageDealt: damageToDeal,
+      healedAmount: 0,
+      defeatedKing,
+      newKing,
+      leftoverHp: startingHp
     };
   }
 
   return {
     nextState: {
       ...currentState,
-      likesPool: remainingPool,
-      totalRoomLikes: updatedTotalLikes
+      likesPool: remainingAttackPool,
+      totalRoomLikes: updatedTotalLikes,
+      processedEventIds: nextProcessedIds
     },
-    hpGained: 0,
-    newTotalLikes: updatedTotalLikes,
-    currentPool: remainingPool
+    eventType: 'NONE',
+    hpDelta: 0,
+    damageDealt: 0,
+    healedAmount: 0,
+    defeatedKing: null,
+    newKing: null,
+    leftoverHp: 0
   };
 }

@@ -10,5 +10,5 @@
   "soundVolume": 0.8,
   "theme": "cyber-arena",
   "orientation": "landscape",
-  "likesPerHp": 1000
+  "likesPerHp": 100
 }

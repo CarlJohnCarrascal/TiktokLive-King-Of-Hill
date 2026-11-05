@@ -5,7 +5,17 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
-import { TikTokLiveConnection, WebcastEvent, ControlEvent } from 'tiktok-live-connector';
+import {
+  TikTokLiveConnection,
+  WebcastEvent,
+  ControlEvent,
+  RoomIdRouteConfig,
+  IsLiveRouteConfig
+} from 'tiktok-live-connector';
+
+// Ensure Room ID & Live checks use TikTok's free unsigned endpoints instead of Euler Stream quota
+RoomIdRouteConfig.skipFetchRoomIdFromEulerRoute = true;
+IsLiveRouteConfig.skipFetchRoomIdFromEulerRoute = true;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,14 +34,18 @@ const defaultConfig = {
   soundVolume: 0.8,
   theme: 'cyber-arena',
   orientation: 'landscape',
-  likesPerHp: 1000
+  likesPerHp: 100
 };
 
 function loadConfig() {
   try {
     if (fs.existsSync(CONFIG_FILE)) {
       const data = fs.readFileSync(CONFIG_FILE, 'utf-8');
-      return { ...defaultConfig, ...JSON.parse(data) };
+      const parsed = JSON.parse(data);
+      if (parsed.likesPerHp === 1000) {
+        parsed.likesPerHp = 100;
+      }
+      return { ...defaultConfig, ...parsed };
     }
   } catch (err) {
     console.error('[Config] Error loading config.json:', err);
@@ -55,11 +69,11 @@ const wss = new WebSocketServer({ server });
 
 app.use(express.json());
 
-// Global broadcast to all connected WebSocket overlays/controls
-function broadcast(message: Record<string, unknown>) {
+// Global broadcast to connected WebSocket overlays/controls (optionally excluding sender)
+function broadcast(message: Record<string, unknown>, excludeClient?: WebSocket) {
   const payload = JSON.stringify(message);
   wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
+    if (client !== excludeClient && client.readyState === WebSocket.OPEN) {
       client.send(payload);
     }
   });
@@ -74,8 +88,179 @@ let reconnectTimer: NodeJS.Timeout | null = null;
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 10;
 
-// Streak deduplication cache (to strictly obey Rule 7: no double counting)
+// Streak deduplication cache (to strictly obey Rule 7: no double counting or duplicate gifts)
 const pendingStreaks = new Map<string, { timer: NodeJS.Timeout; lastData: any }>();
+const completedStreaks = new Map<string, { repeatCount: number; timestamp: number }>();
+const processedMsgIds = new Set<string>();
+
+// Gift Coin Value Catalog (by Gift ID and by lowercase Gift Name)
+interface GiftCatalogEntry {
+  id: string;
+  name: string;
+  diamondCount: number;
+  combo: boolean;
+  type: number;
+  image?: string;
+}
+
+const giftCatalogById = new Map<string, GiftCatalogEntry>();
+const giftCatalogByName = new Map<string, GiftCatalogEntry>();
+
+// Seed built-in popular gifts & load full 723-gift catalog from src/data/tiktokGiftCatalog.json
+function initializeGiftCatalog() {
+  const builtinFallback: Array<{ id: string; name: string; diamondCount: number; combo?: boolean; type?: number; image?: string }> = [
+    { id: '5655', name: 'Rose', diamondCount: 1, combo: true, type: 1 },
+    { id: '6064', name: 'GG', diamondCount: 1, combo: true, type: 1 },
+    { id: '7934', name: 'Heart Me', diamondCount: 1, combo: false, type: 4 },
+    { id: '5827', name: 'Ice Cream Cone', diamondCount: 1, combo: true, type: 1 },
+    { id: '5487', name: 'Finger Heart', diamondCount: 5, combo: true, type: 1 },
+    { id: '8913', name: 'Rosa', diamondCount: 10, combo: true, type: 1 },
+    { id: '5658', name: 'Perfume', diamondCount: 20, combo: true, type: 1 },
+    { id: '5879', name: 'Doughnut', diamondCount: 30, combo: true, type: 1 },
+    { id: '6104', name: 'Cap', diamondCount: 99, combo: true, type: 1 },
+    { id: '5660', name: 'Hand Hearts', diamondCount: 100, combo: true, type: 1 },
+    { id: '6267', name: 'Corgi', diamondCount: 299, combo: true, type: 1 },
+    { id: '7168', name: 'Money Gun', diamondCount: 500, combo: true, type: 1 },
+    { id: '11046', name: 'Galaxy', diamondCount: 1000, combo: true, type: 1 },
+    { id: '6369', name: 'Lion', diamondCount: 29999, combo: false, type: 2 },
+    { id: '9101', name: 'TikTok Universe', diamondCount: 44999, combo: false, type: 2 }
+  ];
+
+  for (const item of builtinFallback) {
+    const entry: GiftCatalogEntry = {
+      id: String(item.id),
+      name: item.name,
+      diamondCount: item.diamondCount,
+      combo: Boolean(item.combo ?? true),
+      type: Number(item.type ?? 1),
+      image: item.image || ''
+    };
+    giftCatalogById.set(entry.id, entry);
+    giftCatalogByName.set(entry.name.toLowerCase(), entry);
+  }
+
+  try {
+    const catalogPath = path.join(__dirname, 'src', 'data', 'tiktokGiftCatalog.json');
+    if (fs.existsSync(catalogPath)) {
+      const raw = fs.readFileSync(catalogPath, 'utf-8');
+      const list = JSON.parse(raw);
+      if (Array.isArray(list)) {
+        for (const g of list) {
+          const entry: GiftCatalogEntry = {
+            id: String(g.id),
+            name: String(g.name || 'Gift'),
+            diamondCount: Math.max(1, Number(g.diamondCount || g.diamond_count || 1)),
+            combo: Boolean(g.combo),
+            type: Number(g.type || 0),
+            image: g.image?.url_list?.[0] || g.image?.urlList?.[0] || g.icon?.url_list?.[0] || g.icon?.urlList?.[0] || (typeof g.image === 'string' ? g.image : '')
+          };
+          giftCatalogById.set(entry.id, entry);
+          if (entry.name) {
+            giftCatalogByName.set(entry.name.trim().toLowerCase(), entry);
+          }
+        }
+        console.log(`[GiftCatalog] Initialized ${giftCatalogById.size} TikTok gifts with exact coin values`);
+      }
+    }
+  } catch (err) {
+    console.warn('[GiftCatalog] Failed to load tiktokGiftCatalog.json:', err);
+  }
+}
+
+initializeGiftCatalog();
+
+async function refreshRoomGiftCatalog(conn: any, roomId?: string) {
+  try {
+    const targetRoomId = roomId && roomId !== 'active_room' ? String(roomId) : '7300000000000000000';
+    const res = await conn.webClient.getJsonObjectFromWebcastApi(
+      'gift/list/',
+      {
+        ...conn.webClient.clientParams,
+        room_id: targetRoomId
+      },
+      false // Unsigned request (100% free, avoids Euler Business plan requirement)
+    );
+    const gifts = res?.data?.gifts;
+    if (Array.isArray(gifts)) {
+      for (const g of gifts) {
+        const entry: GiftCatalogEntry = {
+          id: String(g.id),
+          name: String(g.name || 'Gift'),
+          diamondCount: Math.max(1, Number(g.diamond_count || g.diamondCount || 1)),
+          combo: Boolean(g.combo),
+          type: Number(g.type || 0),
+          image: g.image?.url_list?.[0] || g.image?.urlList?.[0] || g.icon?.url_list?.[0] || g.icon?.urlList?.[0] || (typeof g.image === 'string' ? g.image : '')
+        };
+        giftCatalogById.set(entry.id, entry);
+        if (entry.name) {
+          giftCatalogByName.set(entry.name.trim().toLowerCase(), entry);
+        }
+      }
+      console.log(`[GiftCatalog] Synced ${gifts.length} room gifts (Total catalog size: ${giftCatalogById.size})`);
+    }
+  } catch (err: any) {
+    console.warn('[GiftCatalog] Room gift sync warning:', err?.message || err);
+  }
+}
+
+function isValidId(val: unknown): boolean {
+  if (val === undefined || val === null) return false;
+  const str = String(val).trim();
+  return str !== '' && str !== '0' && str !== 'undefined' && str !== 'null' && str !== 'anonymous';
+}
+
+function extractTikTokUser(data: any) {
+  const idCandidates = [
+    data.userId,
+    data.user?.idStr,
+    data.user?.id,
+    data.user?.displayId,
+    data.user?.uniqueId,
+    data.uniqueId,
+    data.user?.secUid,
+    data.secUid
+  ];
+
+  const validRawId = idCandidates.find(isValidId);
+
+  const uniqueIdCandidate = [
+    data.uniqueId,
+    data.user?.displayId,
+    data.user?.uniqueId
+  ].find(isValidId);
+
+  const rawNickname = [
+    data.nickname,
+    data.user?.nickname,
+    uniqueIdCandidate
+  ].find((n) => typeof n === 'string' && n.trim() !== '' && n.trim() !== '0');
+
+  const nickname = rawNickname ? String(rawNickname).trim() : 'Mystery Gifter';
+
+  const userId = validRawId
+    ? String(validRawId).trim()
+    : rawNickname
+    ? `nick_${String(rawNickname).trim().toLowerCase()}`
+    : `anon_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+  const profilePictureUrl =
+    data.profilePictureUrl ||
+    data.user?.avatarThumb?.urlList?.[0] ||
+    data.user?.avatarMedium?.urlList?.[0] ||
+    data.user?.avatarLarge?.urlList?.[0] ||
+    data.user?.profilePictureUrls?.[0] ||
+    data.userDetails?.profilePictureUrls?.[0] ||
+    `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(nickname)}`;
+
+  return {
+    userId,
+    uniqueId: uniqueIdCandidate ? String(uniqueIdCandidate).trim() : '',
+    nickname,
+    profilePictureUrl
+  };
+}
+
+let rateLimitedUntil = 0;
 
 function stopTikTok() {
   if (reconnectTimer) {
@@ -101,12 +286,42 @@ function stopTikTok() {
   });
 }
 
-function startTikTok(username: string) {
-  stopTikTok();
+async function startTikTok(username: string) {
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer);
+    reconnectTimer = null;
+  }
+  if (tiktokConnection) {
+    try {
+      tiktokConnection.disconnect();
+    } catch (e) {
+      // ignore
+    }
+    tiktokConnection = null;
+  }
+
   if (!username || !username.trim()) return;
 
   const cleanUsername = username.trim().replace(/^@/, '');
   currentTikTokUsername = cleanUsername;
+
+  // If currently in sign-server rate-limit cooldown, wait until cooldown expires before making new sign requests
+  const now = Date.now();
+  if (now < rateLimitedUntil) {
+    const waitMs = rateLimitedUntil - now + 2000;
+    const minsLeft = Math.max(1, Math.ceil(waitMs / 60000));
+    connectionStatus = 'disconnected';
+    lastError = `TikTok sign server cooldown active (~${minsLeft}m left). Auto-reconnecting when ready.`;
+    broadcast({
+      type: 'TIKTOK_STATUS',
+      status: connectionStatus,
+      username: cleanUsername,
+      error: lastError
+    });
+    scheduleReconnect(waitMs);
+    return;
+  }
+
   connectionStatus = 'connecting';
   lastError = null;
 
@@ -118,40 +333,51 @@ function startTikTok(username: string) {
   });
 
   try {
-    tiktokConnection = new TikTokLiveConnection(cleanUsername, {
+    const conn = new TikTokLiveConnection(cleanUsername, {
       processInitialData: false,
       enableExtendedGiftInfo: false,
-      fetchRoomInfoOnConnect: false
+      fetchRoomInfoOnConnect: true
     });
+    tiktokConnection = conn;
 
-    tiktokConnection.connect().then((state: any) => {
-      connectionStatus = 'connected';
-      lastError = null;
-      reconnectAttempts = 0;
-      const roomId = state?.roomId || state?.roomInfo?.roomId || 'active_room';
-      console.log(`[TikTok] Successfully connected to room ID: ${roomId} for user @${cleanUsername}`);
-      broadcast({
-        type: 'TIKTOK_STATUS',
-        status: 'connected',
-        username: cleanUsername,
-        roomId,
-        error: null
-      });
-    }).catch((err: any) => {
-      const errorMsg = err?.message || (typeof err === 'object' ? JSON.stringify(err) : String(err));
-      console.error(`[TikTok] Connection failed for @${cleanUsername}:`, errorMsg);
-      connectionStatus = 'error';
-      lastError = errorMsg;
-      broadcast({
-        type: 'TIKTOK_STATUS',
-        status: 'error',
-        username: cleanUsername,
-        error: lastError
-      });
-      scheduleReconnect();
-    });
+    // Step 1: Check room ID and live status via TikTok's free unsigned endpoints first
+    // so we NEVER consume Euler Stream rate-limit quota if the streamer is offline!
+    let roomId = '';
+    try {
+      roomId = await conn.fetchRoomId();
+      const roomInfo = await conn.fetchRoomInfo(roomId);
+      const roomStatus = roomInfo?.data?.status;
+      if (roomStatus === 4) {
+        console.log(`[TikTok] @${cleanUsername} is currently offline (room status 4). Waiting 30s before next check.`);
+        connectionStatus = 'disconnected';
+        lastError = `@${cleanUsername} is currently offline on TikTok LIVE. Waiting for stream to start...`;
+        broadcast({
+          type: 'TIKTOK_STATUS',
+          status: 'disconnected',
+          username: cleanUsername,
+          error: lastError
+        });
+        scheduleReconnect(30000);
+        return;
+      }
+    } catch (preCheckErr: any) {
+      const preMsg = preCheckErr?.message || String(preCheckErr);
+      if (preMsg.includes("isn't online") || preMsg.includes('Failed to retrieve Room ID')) {
+        console.log(`[TikTok] @${cleanUsername} is not live right now. Will re-check in 30s.`);
+        connectionStatus = 'disconnected';
+        lastError = `@${cleanUsername} is not currently live on TikTok. Waiting for stream to start...`;
+        broadcast({
+          type: 'TIKTOK_STATUS',
+          status: 'disconnected',
+          username: cleanUsername,
+          error: lastError
+        });
+        scheduleReconnect(30000);
+        return;
+      }
+    }
 
-    tiktokConnection.on(ControlEvent.DISCONNECTED, () => {
+    conn.on(ControlEvent.DISCONNECTED, () => {
       console.log(`[TikTok] Disconnected from @${cleanUsername}`);
       if (connectionStatus !== 'error') {
         connectionStatus = 'disconnected';
@@ -162,10 +388,10 @@ function startTikTok(username: string) {
           error: null
         });
       }
-      scheduleReconnect();
+      scheduleReconnect(15000);
     });
 
-    tiktokConnection.on(WebcastEvent.STREAM_END, () => {
+    conn.on(WebcastEvent.STREAM_END, () => {
       console.log(`[TikTok] Live stream ended for @${cleanUsername}`);
       connectionStatus = 'disconnected';
       broadcast({
@@ -176,35 +402,99 @@ function startTikTok(username: string) {
       });
     });
 
-    tiktokConnection.on(ControlEvent.ERROR, (err: any) => {
-      const errorMsg = err?.message || (typeof err === 'object' ? JSON.stringify(err) : String(err));
-      // Ignore non-fatal Euler background warnings if any
-      if (errorMsg.includes('eulerstream') || errorMsg.includes('Failed to fetch room gifts')) {
-        console.warn('[TikTok] Non-fatal background warning ignored:', errorMsg);
+    conn.on(ControlEvent.ERROR, (err: any) => {
+      const retryAfter = Number(err?.retryAfter || err?.exception?.retryAfter || 0);
+      if (retryAfter > 0 || err?.exception?.name === 'SignatureRateLimitError') {
+        // Handled cleanly by connect().catch() below without duplicate console.error spam
         return;
       }
-      console.error('[TikTok] Connector error:', errorMsg);
-      lastError = errorMsg;
-      broadcast({
-        type: 'TIKTOK_STATUS',
-        status: connectionStatus,
-        username: cleanUsername,
-        error: lastError
-      });
+      const errorMsg = err?.message || err?.info || (typeof err === 'object' ? JSON.stringify(err) : String(err));
+      if (
+        errorMsg.includes('eulerstream') ||
+        errorMsg.includes('Failed to fetch room gifts') ||
+        errorMsg.includes('Rate Limited') ||
+        errorMsg.includes('Error while connecting')
+      ) {
+        return;
+      }
+      console.warn('[TikTok] Connector notice:', errorMsg);
     });
 
     // Handle Gift events with strict streak protection (Rule 7)
-    tiktokConnection.on(WebcastEvent.GIFT, (data: any) => {
+    conn.on(WebcastEvent.GIFT, (data: any) => {
       handleIncomingGift(data);
     });
 
-    // Handle Like events (Rule: Every 1,000 heart likes gives +1 HP)
-    tiktokConnection.on(WebcastEvent.LIKE, (data: any) => {
+    // Handle Like events (Rule: 100 heart likes = -1 HP from challengers, +1 HP from current defender)
+    conn.on(WebcastEvent.LIKE, (data: any) => {
       handleIncomingLike(data);
     });
 
+    // Step 2: Connect to the active live stream WebSocket
+    conn.connect(roomId || undefined).then((state: any) => {
+      connectionStatus = 'connected';
+      lastError = null;
+      reconnectAttempts = 0;
+      const connectedRoomId = state?.roomId || state?.roomInfo?.roomId || roomId || 'active_room';
+      console.log(`[TikTok] Successfully connected to room ID: ${connectedRoomId} for user @${cleanUsername}`);
+      refreshRoomGiftCatalog(conn, String(connectedRoomId));
+      broadcast({
+        type: 'TIKTOK_STATUS',
+        status: 'connected',
+        username: cleanUsername,
+        roomId: connectedRoomId,
+        error: null
+      });
+    }).catch((err: any) => {
+      const retryAfterMs = Number(err?.retryAfter || err?.exception?.retryAfter || 0);
+      const rawMsg = err?.message || (typeof err === 'object' ? JSON.stringify(err) : String(err));
+
+      if (retryAfterMs > 0 || err?.name === 'SignatureRateLimitError' || rawMsg.includes('Rate Limited')) {
+        const cooldownMs = Math.max(retryAfterMs || 300000, 60000);
+        rateLimitedUntil = Date.now() + cooldownMs;
+        const mins = Math.max(1, Math.ceil(cooldownMs / 60000));
+        const friendlyMsg = `TikTok sign server rate limit reached. Cooldown ~${mins} min(s) before auto-reconnect.`;
+        console.log(`[TikTok] Rate limit cooldown for @${cleanUsername}: waiting ${ Math.round(cooldownMs / 1000) }s before next attempt.`);
+        connectionStatus = 'disconnected';
+        lastError = friendlyMsg;
+        broadcast({
+          type: 'TIKTOK_STATUS',
+          status: 'disconnected',
+          username: cleanUsername,
+          error: friendlyMsg
+        });
+        scheduleReconnect(cooldownMs + 2000);
+        return;
+      }
+
+      if (rawMsg.includes("isn't online") || err?.name === 'UserOfflineError') {
+        console.log(`[TikTok] @${cleanUsername} is currently offline.`);
+        connectionStatus = 'disconnected';
+        lastError = `@${cleanUsername} is currently offline on TikTok LIVE.`;
+        broadcast({
+          type: 'TIKTOK_STATUS',
+          status: 'disconnected',
+          username: cleanUsername,
+          error: lastError
+        });
+        scheduleReconnect(30000);
+        return;
+      }
+
+      console.warn(`[TikTok] Connection notice for @${cleanUsername}:`, rawMsg);
+      connectionStatus = 'error';
+      lastError = rawMsg;
+      broadcast({
+        type: 'TIKTOK_STATUS',
+        status: 'error',
+        username: cleanUsername,
+        error: lastError
+      });
+      scheduleReconnect();
+    });
+
   } catch (err: any) {
-    console.error('[TikTok] Initialization error:', err);
+    console.warn('[TikTok] Initialization notice:', err?.message || err);
     connectionStatus = 'error';
     lastError = err?.message || 'Initialization failed';
     broadcast({
@@ -216,15 +506,17 @@ function startTikTok(username: string) {
   }
 }
 
-function scheduleReconnect() {
+function scheduleReconnect(customDelayMs?: number) {
   if (reconnectTimer || !currentTikTokUsername) return;
-  if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+  if (!customDelayMs && reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
     console.log('[TikTok] Max reconnect attempts reached. Waiting for user action.');
     return;
   }
-  reconnectAttempts++;
-  const delay = Math.min(5000 * Math.pow(1.5, reconnectAttempts - 1), 30000);
-  console.log(`[TikTok] Scheduling reconnect #${reconnectAttempts} in ${Math.round(delay / 1000)}s...`);
+  if (!customDelayMs) {
+    reconnectAttempts++;
+  }
+  const delay = customDelayMs ?? Math.min(10000 * Math.pow(1.5, reconnectAttempts - 1), 60000);
+  console.log(`[TikTok] Scheduling next check in ${Math.round(delay / 1000)}s...`);
   reconnectTimer = setTimeout(() => {
     reconnectTimer = null;
     if (currentTikTokUsername) {
@@ -236,36 +528,101 @@ function scheduleReconnect() {
 // Process gift data and apply Rule 7 (Count repeat/streaks only once per final streak value)
 function handleIncomingGift(data: any) {
   try {
-    const rawUserId = data.userId ||
-      data.user?.id ||
-      data.user?.idStr ||
-      data.user?.uniqueId ||
-      data.user?.secUid ||
-      data.uniqueId ||
-      data.secUid;
+    const msgId = data.common?.msgId || data.logId || data.orderId;
+    if (isValidId(msgId)) {
+      const msgKey = String(msgId);
+      if (processedMsgIds.has(msgKey)) {
+        return;
+      }
+      processedMsgIds.add(msgKey);
+      if (processedMsgIds.size > 500) {
+        const firstKey = processedMsgIds.values().next().value;
+        if (firstKey) processedMsgIds.delete(firstKey);
+      }
+    }
 
-    const nickname = data.nickname || data.user?.nickname || data.user?.uniqueId || data.uniqueId || 'Mystery Gifter';
-    const userId = rawUserId
-      ? String(rawUserId)
-      : `gifter_${encodeURIComponent(nickname)}_${Math.random().toString(36).substring(2, 7)}`;
+    const { userId, nickname, profilePictureUrl } = extractTikTokUser(data);
 
-    const profilePictureUrl = data.profilePictureUrl || 
-      data.user?.profilePictureUrls?.[0] || 
-      data.user?.avatarThumb?.urlList?.[0] || 
-      data.userDetails?.profilePictureUrls?.[0] || 
-      `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(nickname)}`;
-    
-    let giftName = data.giftName || data.gift?.name || data.giftDetails?.giftName;
-    const giftId = data.giftId || data.gift?.id || 'gift';
-    const diamondCount = Number(data.diamondCount || data.gift?.diamond_count || data.diamonds || 1);
-    const repeatCount = Number(data.repeatCount || data.repeat_count || 1);
-    const repeatEnd = Boolean(data.repeatEnd || data.repeat_end === 1 || data.gift?.repeat_end === 1);
-    const isStreakGift = Boolean(data.giftType === 1 || (data.repeatCount && data.repeatCount > 1) || !repeatEnd);
+    const rawGiftId = [data.giftId, data.gift?.id, data.extendedGiftInfo?.id].find(isValidId);
+    const giftId = rawGiftId ? String(rawGiftId).trim() : 'gift';
+
+    const catalogById = giftCatalogById.get(giftId);
+
+    const rawNameCandidates = [
+      data.giftName,
+      data.gift?.name,
+      data.extendedGiftInfo?.name,
+      data.giftDetails?.giftName,
+      catalogById?.name,
+      data.gift?.describe
+    ];
+    let giftName = rawNameCandidates.find(
+      (n) => typeof n === 'string' && n.trim() !== '' && n.trim() !== 'Gift'
+    );
+
+    const catalogByName = giftName
+      ? giftCatalogByName.get(String(giftName).trim().toLowerCase())
+      : undefined;
+
+    if (!giftName && catalogByName?.name) {
+      giftName = catalogByName.name;
+    }
+
+    const repeatCount = Math.max(
+      1,
+      Number(data.repeatCount || data.comboCount || data.repeat_count || 1)
+    );
+
+    const fanTicketUnitCoins =
+      data.fanTicketCount && Number(data.fanTicketCount) > 0
+        ? Math.max(1, Math.round(Number(data.fanTicketCount) / repeatCount))
+        : 0;
+
+    const diamondCandidates = [
+      Number(catalogById?.diamondCount || 0),
+      Number(catalogByName?.diamondCount || 0),
+      Number(data.diamondCount || 0),
+      Number(data.gift?.diamondCount || 0),
+      Number(data.gift?.diamond_count || 0),
+      Number(data.extendedGiftInfo?.diamond_count || 0),
+      Number(data.extendedGiftInfo?.diamondCount || 0),
+      Number(data.giftDetails?.diamondCount || 0),
+      Number(data.diamonds || 0),
+      fanTicketUnitCoins
+    ].filter((n) => Number.isFinite(n) && n > 0);
+
+    // Prefer non-trivial (> 1) value if a fallback field defaulted to 1 while catalog has real coin cost
+    const nonTrivialCoins = diamondCandidates.find((n) => n > 1);
+    const diamondCount = nonTrivialCoins || diamondCandidates[0] || 1;
+
+    const repeatEnd = Boolean(
+      data.repeatEnd === 1 ||
+      data.repeatEnd === true ||
+      data.repeat_end === 1 ||
+      data.gift?.repeat_end === 1
+    );
+
+    const isStreakGift = Boolean(
+      data.gift?.type === 1 ||
+      data.gift?.combo === true ||
+      data.giftType === 1 ||
+      data.extendedGiftInfo?.type === 1 ||
+      catalogById?.type === 1 ||
+      catalogById?.combo === true ||
+      catalogByName?.type === 1 ||
+      catalogByName?.combo === true ||
+      (data.repeatEnd !== undefined && !repeatEnd)
+    );
 
     if (!giftName || giftName === 'Gift') {
-      if (diamondCount === 1) giftName = 'Rose';
+      if (catalogById?.name) giftName = catalogById.name;
+      else if (diamondCount === 1) giftName = 'Rose';
+      else if (diamondCount === 5) giftName = 'Finger Heart';
+      else if (diamondCount === 10) giftName = 'Rosa';
+      else if (diamondCount === 20) giftName = 'Perfume';
       else if (diamondCount === 30) giftName = 'Doughnut';
-      else if (diamondCount === 100) giftName = 'Confetti';
+      else if (diamondCount === 99) giftName = 'Cap';
+      else if (diamondCount === 100) giftName = 'Hand Hearts';
       else if (diamondCount === 299) giftName = 'Corgi';
       else if (diamondCount === 500) giftName = 'Money Gun';
       else if (diamondCount === 1000) giftName = 'Galaxy';
@@ -274,33 +631,63 @@ function handleIncomingGift(data: any) {
       else giftName = `Gift (${diamondCount} coins)`;
     }
 
-    // If it's a non-streak gift or streak is finalized:
+    const groupId = isValidId(data.groupId) ? String(data.groupId) : '';
+    const streakKey = groupId ? `${userId}_${giftId}_${groupId}` : `${userId}_${giftId}`;
+
+    // Prune old completed streaks (> 30s)
+    const now = Date.now();
+    for (const [k, v] of completedStreaks.entries()) {
+      if (now - v.timestamp > 30000) {
+        completedStreaks.delete(k);
+      }
+    }
+
+    // Check if this exact streak was already finalized and dispatched
+    const completed = completedStreaks.get(streakKey);
+    if (completed && now - completed.timestamp < 15000 && repeatCount <= completed.repeatCount) {
+      return;
+    }
+
+    // If it's a non-streak gift or the streak is officially finalized:
     if (!isStreakGift || repeatEnd) {
-      // Clear any pending debounce streak
-      const streakKey = `${userId}_${giftId}`;
       if (pendingStreaks.has(streakKey)) {
         clearTimeout(pendingStreaks.get(streakKey)!.timer);
         pendingStreaks.delete(streakKey);
       }
 
-      const totalCoins = diamondCount * (repeatCount || 1);
+      completedStreaks.set(streakKey, { repeatCount, timestamp: now });
+
+      const giftPictureUrl =
+        data.giftPictureUrl ||
+        data.gift?.image?.urlList?.[0] ||
+        data.gift?.icon?.urlList?.[0] ||
+        data.extendedGiftInfo?.image?.urlList?.[0] ||
+        data.giftDetails?.giftImage?.urlList?.[0] ||
+        data.gift?.image?.url_list?.[0] ||
+        data.gift?.icon?.url_list?.[0] ||
+        catalogById?.image ||
+        '';
+
+      const totalCoins = diamondCount * repeatCount;
       dispatchGiftEvent({
+        eventId: `gift_${streakKey}_${repeatCount}_${now}`,
+        streakKey,
         userId,
         nickname,
         profilePictureUrl,
         giftName,
+        giftPictureUrl,
         giftId: String(giftId),
         diamondCount,
         repeatCount,
         coins: totalCoins,
-        timestamp: Date.now()
+        timestamp: now
       });
       return;
     }
 
-    // For in-progress streak gifts: wait for the final streak update with a fallback debounce (1200ms)
-    // in case TikTok's WebSocket drops the final repeatEnd packet
-    const streakKey = `${userId}_${giftId}`;
+    // For in-progress streak gifts (repeatEnd === 0):
+    // Wait for TikTok's combo ring to finish (up to 4500ms after last tap) so we only count once!
     if (pendingStreaks.has(streakKey)) {
       clearTimeout(pendingStreaks.get(streakKey)!.timer);
     }
@@ -310,20 +697,43 @@ function handleIncomingGift(data: any) {
       if (pending) {
         pendingStreaks.delete(streakKey);
         const pData = pending.lastData;
-        const totalCoins = Number(pData.diamondCount || 1) * Number(pData.repeatCount || 1);
+        const finalRepeat = Math.max(1, Number(pData.repeatCount || 1));
+        const finalDiamond = Math.max(1, Number(pData.diamondCount || 1));
+
+        // Double check it wasn't already dispatched by repeatEnd
+        const alreadyDone = completedStreaks.get(streakKey);
+        if (alreadyDone && Date.now() - alreadyDone.timestamp < 15000 && finalRepeat <= alreadyDone.repeatCount) {
+          return;
+        }
+
+        completedStreaks.set(streakKey, { repeatCount: finalRepeat, timestamp: Date.now() });
+
+        const totalCoins = finalDiamond * finalRepeat;
+        const giftPictureUrl =
+          pData.giftPictureUrl ||
+          pData.gift?.image?.urlList?.[0] ||
+          pData.gift?.icon?.urlList?.[0] ||
+          pData.extendedGiftInfo?.image?.urlList?.[0] ||
+          pData.giftDetails?.giftImage?.urlList?.[0] ||
+          catalogById?.image ||
+          '';
+
         dispatchGiftEvent({
+          eventId: `gift_${streakKey}_${finalRepeat}_${Date.now()}`,
+          streakKey,
           userId,
           nickname,
           profilePictureUrl,
           giftName,
+          giftPictureUrl,
           giftId: String(giftId),
-          diamondCount: Number(pData.diamondCount || 1),
-          repeatCount: Number(pData.repeatCount || 1),
+          diamondCount: finalDiamond,
+          repeatCount: finalRepeat,
           coins: totalCoins,
           timestamp: Date.now()
         });
       }
-    }, 1200);
+    }, 4500);
 
     pendingStreaks.set(streakKey, {
       timer,
@@ -336,22 +746,49 @@ function handleIncomingGift(data: any) {
 }
 
 function dispatchGiftEvent(giftData: any) {
-  console.log(`[Gift] ${giftData.nickname} sent ${giftData.repeatCount}x ${giftData.giftName} (${giftData.coins} coins)`);
+  let giftPictureUrl = giftData.giftPictureUrl || '';
+  if (!giftPictureUrl) {
+    const nameKey = String(giftData.giftName || '').trim().toLowerCase();
+    const catalogEntry = giftCatalogByName.get(nameKey) || (giftData.giftId ? giftCatalogById.get(String(giftData.giftId)) : undefined);
+    if (catalogEntry?.image) {
+      giftPictureUrl = catalogEntry.image;
+    }
+  }
+
+  const payload = {
+    ...giftData,
+    giftPictureUrl,
+    eventId: giftData.eventId || `gift_${giftData.userId || 'user'}_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`
+  };
+  console.log(`[Gift] ${payload.nickname} (${payload.userId}) sent ${payload.repeatCount}x ${payload.giftName} (${payload.coins} coins)`);
   broadcast({
     type: 'GIFT_EVENT',
-    data: giftData
+    data: payload
   });
 }
 
 function handleIncomingLike(data: any) {
   try {
-    const likeCount = Number(data.likeCount || data.count || 1);
-    const totalLikes = Number(data.totalLikeCount || 0);
-    const nickname = data.nickname || data.user?.nickname || data.user?.uniqueId || 'Viewer';
+    const msgId = data.common?.msgId;
+    if (isValidId(msgId)) {
+      const msgKey = `like_${msgId}`;
+      if (processedMsgIds.has(msgKey)) {
+        return;
+      }
+      processedMsgIds.add(msgKey);
+    }
+
+    const { userId, nickname, profilePictureUrl } = extractTikTokUser(data);
+    const likeCount = Math.max(1, Number(data.likeCount || data.count || 1));
+    const totalLikes = Number(data.totalLikeCount || data.total || 0);
+
     dispatchLikeEvent({
+      eventId: `like_${userId}_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      userId,
+      nickname,
+      profilePictureUrl,
       likeCount,
       totalLikes,
-      nickname,
       timestamp: Date.now()
     });
   } catch (err) {
@@ -360,9 +797,13 @@ function handleIncomingLike(data: any) {
 }
 
 function dispatchLikeEvent(likeData: any) {
+  const payload = {
+    ...likeData,
+    eventId: likeData.eventId || `like_${likeData.userId || 'user'}_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`
+  };
   broadcast({
     type: 'LIKE_EVENT',
-    data: likeData
+    data: payload
   });
 }
 
@@ -408,6 +849,7 @@ app.post('/api/disconnect', (_req, res) => {
 
 app.post('/api/test-gift', (req, res) => {
   const gift = {
+    eventId: `test_gift_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
     userId: req.body.userId || `user_${Math.floor(Math.random() * 9000 + 1000)}`,
     nickname: req.body.nickname || 'TestGifter',
     profilePictureUrl: req.body.profilePictureUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(req.body.nickname || 'Tester')}`,
@@ -424,10 +866,14 @@ app.post('/api/test-gift', (req, res) => {
 });
 
 app.post('/api/test-like', (req, res) => {
+  const nickname = req.body.nickname || 'HeartChallenger';
   const likeData = {
+    eventId: `test_like_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+    userId: req.body.userId || `liker_${nickname.toLowerCase()}`,
+    nickname,
+    profilePictureUrl: req.body.profilePictureUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(nickname)}`,
     likeCount: Number(req.body.likeCount || 100),
-    totalLikes: Number(req.body.totalLikes || 1000),
-    nickname: req.body.nickname || 'HeartGiver',
+    totalLikes: Number(req.body.totalLikes || 100),
     timestamp: Date.now()
   };
   dispatchLikeEvent(likeData);
@@ -468,11 +914,14 @@ wss.on('connection', (ws) => {
           config: currentConfig
         });
       } else if (parsed.type === 'GAME_STATE_SYNC') {
-        // Broadcast sync to other browser windows (e.g. OBS window receiving state from Control Panel)
-        broadcast({
-          type: 'SYNCED_GAME_STATE',
-          state: parsed.state
-        });
+        // Broadcast sync ONLY to other browser windows (e.g. OBS window receiving state from Control Panel)
+        broadcast(
+          {
+            type: 'SYNCED_GAME_STATE',
+            state: parsed.state
+          },
+          ws
+        );
       }
     } catch (e) {
       console.error('[WS] Error processing message:', e);

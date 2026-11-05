@@ -6,14 +6,16 @@ import {
   processGiftAction,
   applyDecayTick,
   processLikeAction,
-  King,
-  CombatResult
+  King
 } from './game/rules';
 import { OverlayView } from './components/OverlayView';
 import { ControlPanel } from './components/ControlPanel';
 import { FloatingItem } from './components/FloatingCombatText';
+import { RocketGiftItem, RocketGiftLayer } from './components/RocketGiftLayer';
 import { soundManager } from './utils/audio';
-import { Eye, Sliders, Maximize2, Sparkles, Volume2, VolumeX } from 'lucide-react';
+import { Eye, Sliders, Maximize2 } from 'lucide-react';
+
+const STORAGE_KEY = 'koth_game_state_v2';
 
 export default function App() {
   // Check if opened as dedicated OBS browser source via URL query
@@ -25,6 +27,34 @@ export default function App() {
   const [activeView, setActiveView] = useState<'studio' | 'overlay'>(
     isPureOverlayMode ? 'overlay' : 'studio'
   );
+  const [showOverlayControls, setShowOverlayControls] = useState(false);
+
+  // Auto-hide "Back to Studio Controls" button in Full Overlay view after 2.2s of inactivity
+  useEffect(() => {
+    if (activeView !== 'overlay' || isPureOverlayMode) return;
+
+    let hideTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const triggerShow = () => {
+      setShowOverlayControls(true);
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        setShowOverlayControls(false);
+      }, 2200);
+    };
+
+    // Show briefly on entry, then auto-hide
+    triggerShow();
+
+    window.addEventListener('mousemove', triggerShow);
+    window.addEventListener('touchstart', triggerShow);
+
+    return () => {
+      if (hideTimer) clearTimeout(hideTimer);
+      window.removeEventListener('mousemove', triggerShow);
+      window.removeEventListener('touchstart', triggerShow);
+    };
+  }, [activeView, isPureOverlayMode]);
 
   // Configuration state
   const [config, setConfig] = useState<GameConfig>({
@@ -39,16 +69,25 @@ export default function App() {
     soundVolume: 0.8,
     theme: 'cyber-arena',
     orientation: urlOrientation || 'landscape',
-    likesPerHp: 1000
+    likesPerHp: 100
   });
 
   // Core Game State
   const [gameState, setGameState] = useState<GameState>(() => {
-    // Attempt local storage persistence for session continuity
     if (typeof window !== 'undefined') {
       try {
-        const saved = localStorage.getItem('koth_game_state');
-        if (saved) return JSON.parse(saved);
+        // Clear legacy v1 storage that may contain duplicated gifts or '0' userId
+        localStorage.removeItem('koth_game_state');
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          return {
+            ...initialGameState,
+            ...parsed,
+            defenderLikesPool: parsed.defenderLikesPool || 0,
+            processedEventIds: Array.isArray(parsed.processedEventIds) ? parsed.processedEventIds : []
+          };
+        }
       } catch (e) {
         // ignore
       }
@@ -60,6 +99,7 @@ export default function App() {
   const [isHit, setIsHit] = useState(false);
   const [isHealed, setIsHealed] = useState(false);
   const [floatingItems, setFloatingItems] = useState<FloatingItem[]>([]);
+  const [rocketGifts, setRocketGifts] = useState<RocketGiftItem[]>([]);
   const [takeoverInfo, setTakeoverInfo] = useState<{
     newKing: King | null;
     defeatedKing: King | null;
@@ -88,14 +128,14 @@ export default function App() {
   // Save game state to localStorage for persistence
   useEffect(() => {
     try {
-      localStorage.setItem('koth_game_state', JSON.stringify(gameState));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
     } catch (e) {
       // ignore
     }
   }, [gameState]);
 
   // Add floating combat text popup
-  const addFloatingText = (
+  const addFloatingText = useCallback((
     text: string,
     type: 'damage' | 'heal' | 'ko' | 'first_king',
     subtext?: string
@@ -113,14 +153,83 @@ export default function App() {
     setTimeout(() => {
       setFloatingItems(prev => prev.filter(item => item.id !== newItem.id));
     }, 1500);
-  };
+  }, []);
+
+  // Launch gift rocketing directly into the defender profile avatar
+  const launchRocketGift = useCallback((gift: {
+    giftName: string;
+    giftPictureUrl?: string;
+    diamondCount: number;
+    nickname: string;
+    profilePictureUrl: string;
+    coins: number;
+    isHeal?: boolean;
+  }) => {
+    // 1. Calculate random start position along the bottom edge of the screen
+    const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1280;
+    const windowHeight = typeof window !== 'undefined' ? window.innerHeight : 720;
+
+    // Random start along the bottom (5% to 95% of viewport width)
+    const startX = 20 + Math.random() * (windowWidth - 40);
+    const startY = windowHeight - (10 + Math.random() * 40);
+
+    // 2. Measure actual bounding rectangle of the Defender Profile Avatar in real time!
+    let targetX = windowWidth * 0.35;
+    let targetY = 120;
+
+    const avatarElem = typeof document !== 'undefined' ? document.getElementById('defender-avatar-target') : null;
+    if (avatarElem) {
+      const rect = avatarElem.getBoundingClientRect();
+      targetX = rect.left + rect.width / 2;
+      targetY = rect.top + rect.height / 2;
+    }
+
+    // 3. Compute exact vector delta
+    const deltaX = targetX - startX;
+    const deltaY = targetY - startY; // negative value since target is higher up
+
+    // 4. Compute pointing angle in degrees:
+    // When deltaX = 0, deltaY < 0 (pointing straight UP), angle is 0deg.
+    // In math: Math.atan2(deltaY, deltaX) gives angle relative to positive X-axis (pointing right).
+    // Straight UP is -90deg (-PI/2). To align 0deg with UP: (rad * 180 / Math.PI) + 90
+    const rad = Math.atan2(deltaY, deltaX);
+    const pointingAngleDeg = Math.round((rad * 180) / Math.PI + 90);
+
+    const newRocket: RocketGiftItem = {
+      id: `rocket_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      giftName: gift.giftName,
+      giftPictureUrl: gift.giftPictureUrl,
+      diamondCount: gift.diamondCount,
+      nickname: gift.nickname,
+      avatarUrl: gift.profilePictureUrl,
+      coins: gift.coins,
+      isHeal: !!gift.isHeal,
+      startX,
+      startY,
+      targetX,
+      targetY,
+      deltaX,
+      deltaY,
+      pointingAngle: pointingAngleDeg
+    };
+
+    setRocketGifts(prev => [...prev.slice(-8), newRocket]);
+
+    // Remove projectile after animation finishes
+    setTimeout(() => {
+      setRocketGifts(prev => prev.filter(r => r.id !== newRocket.id));
+    }, 1100);
+  }, []);
 
   // Process incoming combat gift action
   const handleIncomingGift = useCallback((gift: {
+    eventId?: string;
+    streakKey?: string;
     userId: string;
     nickname: string;
     profilePictureUrl: string;
     giftName: string;
+    giftPictureUrl?: string;
     diamondCount: number;
     repeatCount: number;
     coins: number;
@@ -128,36 +237,56 @@ export default function App() {
     setGameState(prev => {
       const { nextState, result } = processGiftAction(prev, gift, config);
 
-      // Trigger audio & animations based on result
-      if (result.eventType === 'FIRST_KING') {
-        soundManager.playKo();
-        addFloatingText(`👑 NEW KING: ${gift.nickname}`, 'first_king', `+${result.leftoverHp} Starting HP`);
-        setTakeoverInfo({
-          newKing: result.newKing,
-          defeatedKing: null,
-          leftoverHp: result.leftoverHp
-        });
-      } else if (result.eventType === 'HEAL') {
-        soundManager.playHeal();
-        setIsHealed(true);
-        setTimeout(() => setIsHealed(false), 600);
-        addFloatingText(`+${result.healedAmount.toLocaleString()} HP HEAL`, 'heal', `${gift.nickname}'s ${gift.giftName}`);
-      } else if (result.eventType === 'HIT') {
-        soundManager.playHit();
-        setIsHit(true);
-        setTimeout(() => setIsHit(false), 350);
-        addFloatingText(`-${result.damageDealt.toLocaleString()} HP`, 'damage', `${gift.nickname} (${gift.giftName})`);
-      } else if (result.eventType === 'TAKEOVER') {
-        soundManager.playKo();
-        setIsHit(true);
-        setTimeout(() => setIsHit(false), 400);
-        addFloatingText(`💥 KO TAKEOVER!`, 'ko', `+${result.leftoverHp.toLocaleString()} HP Leftover`);
-        setTakeoverInfo({
-          newKing: result.newKing,
-          defeatedKing: result.defeatedKing,
-          leftoverHp: result.leftoverHp
-        });
+      if (result.eventType === 'DUPLICATE') {
+        return prev;
       }
+
+      // Always launch animated rocketing gift towards defender!
+      launchRocketGift({
+        giftName: gift.giftName,
+        giftPictureUrl: gift.giftPictureUrl,
+        diamondCount: gift.diamondCount,
+        nickname: gift.nickname,
+        profilePictureUrl: gift.profilePictureUrl,
+        coins: gift.coins,
+        isHeal: result.eventType === 'HEAL'
+      });
+
+      // The rocket takes ~900ms to fly across the screen and reach the Defender profile avatar.
+      // Trigger the bomb explosion, sound, screen shake, and floating text precisely upon arrival!
+      const ROCKET_FLIGHT_DURATION_MS = 900;
+
+      setTimeout(() => {
+        if (result.eventType === 'FIRST_KING') {
+          soundManager.playKo();
+          addFloatingText(`👑 NEW DEFENDER: ${gift.nickname}`, 'first_king', `+${result.leftoverHp} Starting HP`);
+          setTakeoverInfo({
+            newKing: result.newKing,
+            defeatedKing: null,
+            leftoverHp: result.leftoverHp
+          });
+        } else if (result.eventType === 'HEAL') {
+          soundManager.playHeal();
+          setIsHealed(true);
+          setTimeout(() => setIsHealed(false), 700);
+          addFloatingText(`+${result.healedAmount.toLocaleString()} HP HEAL`, 'heal', `${gift.nickname}'s ${gift.giftName}`);
+        } else if (result.eventType === 'HIT') {
+          soundManager.playHit();
+          setIsHit(true);
+          setTimeout(() => setIsHit(false), 450);
+          addFloatingText(`-${result.damageDealt.toLocaleString()} HP`, 'damage', `${gift.nickname} (${gift.giftName})`);
+        } else if (result.eventType === 'TAKEOVER') {
+          soundManager.playKo();
+          setIsHit(true);
+          setTimeout(() => setIsHit(false), 500);
+          addFloatingText(`💥 KO TAKEOVER!`, 'ko', `+${result.leftoverHp.toLocaleString()} HP Leftover`);
+          setTakeoverInfo({
+            newKing: result.newKing,
+            defeatedKing: result.defeatedKing,
+            leftoverHp: result.leftoverHp
+          });
+        }
+      }, ROCKET_FLIGHT_DURATION_MS);
 
       // Sync updated state to other connected browser sources via WebSocket
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
@@ -169,21 +298,52 @@ export default function App() {
 
       return nextState;
     });
-  }, [config]);
+  }, [config, addFloatingText]);
 
-  // Process incoming like action (Rule: every 1,000 heart likes gives +1 HP)
+  // Process incoming like action:
+  // - 100 heart likes from challengers DECREASES Defender HP (-1 HP)
+  // - 100 heart likes from Current Defender INCREASES her own HP (+1 HP)
   const handleIncomingLike = useCallback((likeData: {
+    eventId?: string;
+    userId?: string;
+    nickname?: string;
+    profilePictureUrl?: string;
     likeCount: number;
     totalLikes?: number;
-    nickname?: string;
   }) => {
     setGameState(prev => {
-      const { nextState, hpGained } = processLikeAction(prev, likeData.likeCount, config, likeData.nickname);
-      if (hpGained > 0) {
+      const result = processLikeAction(prev, likeData, config);
+      const { nextState, eventType, damageDealt, healedAmount, defeatedKing, newKing, leftoverHp } = result;
+      const likesTarget = config.likesPerHp || 100;
+
+      if (eventType === 'LIKE_HEAL' && healedAmount > 0) {
         soundManager.playHeal();
         setIsHealed(true);
         setTimeout(() => setIsHealed(false), 500);
-        addFloatingText(`❤️ +${hpGained} HP`, 'heal', `1,000 Heart Likes reached!`);
+        addFloatingText(
+          `❤️ +${healedAmount} HP HEAL`,
+          'heal',
+          `Defender ${likeData.nickname || ''} (${likesTarget} Heart Likes)`
+        );
+      } else if (eventType === 'LIKE_HIT' && damageDealt > 0) {
+        soundManager.playHit();
+        setIsHit(true);
+        setTimeout(() => setIsHit(false), 350);
+        addFloatingText(
+          `💔 -${damageDealt} HP`,
+          'damage',
+          `${likesTarget} Heart Likes Attack!`
+        );
+      } else if (eventType === 'LIKE_TAKEOVER') {
+        soundManager.playKo();
+        setIsHit(true);
+        setTimeout(() => setIsHit(false), 400);
+        addFloatingText(`💥 LIKE KO TAKEOVER!`, 'ko', `+${leftoverHp} HP Leftover`);
+        setTakeoverInfo({
+          newKing,
+          defeatedKing,
+          leftoverHp
+        });
       }
 
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
@@ -195,14 +355,28 @@ export default function App() {
 
       return nextState;
     });
-  }, [config]);
+  }, [config, addFloatingText]);
 
-  // Connect to Backend WebSocket
+  // Keep latest callbacks in refs so WebSocket connection is never torn down/recreated on config updates
+  const handleGiftRef = useRef(handleIncomingGift);
+  const handleLikeRef = useRef(handleIncomingLike);
+
   useEffect(() => {
-    let ws: WebSocket;
-    let reconnectTimeout: NodeJS.Timeout;
+    handleGiftRef.current = handleIncomingGift;
+  }, [handleIncomingGift]);
+
+  useEffect(() => {
+    handleLikeRef.current = handleIncomingLike;
+  }, [handleIncomingLike]);
+
+  // Connect to Backend WebSocket (single persistent connection per tab)
+  useEffect(() => {
+    let ws: WebSocket | null = null;
+    let reconnectTimeout: NodeJS.Timeout | null = null;
+    let isMounted = true;
 
     const connectWs = () => {
+      if (!isMounted) return;
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const wsUrl = `${protocol}//${window.location.host}`;
 
@@ -215,19 +389,24 @@ export default function App() {
         };
 
         ws.onmessage = (event) => {
+          if (!isMounted) return;
           try {
             const message = JSON.parse(event.data);
             if (message.type === 'INIT_STATE') {
               if (message.config) {
-                setConfig(prev => ({ ...prev, ...message.config }));
+                const incomingConfig = { ...message.config };
+                if (incomingConfig.likesPerHp === 1000) {
+                  incomingConfig.likesPerHp = 100;
+                }
+                setConfig(prev => ({ ...prev, ...incomingConfig }));
               }
               if (message.tiktokStatus) {
                 setTiktokStatus(message.tiktokStatus);
               }
             } else if (message.type === 'GIFT_EVENT') {
-              handleIncomingGift(message.data);
+              handleGiftRef.current(message.data);
             } else if (message.type === 'LIKE_EVENT') {
-              handleIncomingLike(message.data);
+              handleLikeRef.current(message.data);
             } else if (message.type === 'TIKTOK_STATUS') {
               setTiktokStatus({
                 status: message.status,
@@ -237,7 +416,6 @@ export default function App() {
             } else if (message.type === 'CONFIG_UPDATED') {
               setConfig(prev => ({ ...prev, ...message.config }));
             } else if (message.type === 'SYNCED_GAME_STATE') {
-              // Synchronize state across tabs if another tab triggered it
               setGameState(message.state);
             }
           } catch (err) {
@@ -246,27 +424,39 @@ export default function App() {
         };
 
         ws.onclose = () => {
+          if (!isMounted) return;
           console.log('[App] WebSocket disconnected. Reconnecting in 3s...');
           reconnectTimeout = setTimeout(connectWs, 3000);
         };
 
-        ws.onerror = (err) => {
-          console.warn('[App] WebSocket error:', err);
-          ws.close();
+        ws.onerror = () => {
+          if (ws) {
+            ws.close();
+          }
         };
       } catch (e) {
         console.error('[App] Failed to create WebSocket:', e);
-        reconnectTimeout = setTimeout(connectWs, 3000);
+        if (isMounted) {
+          reconnectTimeout = setTimeout(connectWs, 3000);
+        }
       }
     };
 
     connectWs();
 
     return () => {
-      if (reconnectTimeout) clearTimeout(reconnectTimeout);
-      if (ws) ws.close();
+      isMounted = false;
+      if (reconnectTimeout) {
+        clearTimeout(reconnectTimeout);
+      }
+      if (ws) {
+        ws.onclose = null;
+        ws.onerror = null;
+        ws.onmessage = null;
+        ws.close();
+      }
     };
-  }, [handleIncomingGift]);
+  }, []);
 
   // Rule 6: Optional HP Decay Interval
   useEffect(() => {
@@ -284,18 +474,41 @@ export default function App() {
     }, intervalMs);
 
     return () => clearInterval(decayInterval);
-  }, [config.enableDecay, config.decayAmount, config.decayIntervalSeconds, gameState.currentKing?.userId]);
+  }, [config.enableDecay, config.decayAmount, config.decayIntervalSeconds, gameState.currentKing?.userId, addFloatingText]);
 
   // Handlers for Control Panel
   const handleSimulateGift = (giftData: any) => {
-    // If backend is connected, route through backend for multi-source sync, otherwise apply directly
+    const payload = {
+      ...giftData,
+      eventId: giftData.eventId || `sim_gift_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`
+    };
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify({
         type: 'SIMULATE_GIFT',
-        payload: giftData
+        payload
       }));
     } else {
-      handleIncomingGift(giftData);
+      handleIncomingGift(payload);
+    }
+  };
+
+  const handleSimulateLike = (likeData: {
+    userId?: string;
+    nickname: string;
+    profilePictureUrl?: string;
+    likeCount: number;
+  }) => {
+    const payload = {
+      ...likeData,
+      eventId: `sim_like_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`
+    };
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({
+        type: 'SIMULATE_LIKE',
+        payload
+      }));
+    } else {
+      handleIncomingLike(payload);
     }
   };
 
@@ -308,7 +521,6 @@ export default function App() {
         config: updated
       }));
     }
-    // Also save via HTTP
     fetch('/api/config', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -342,7 +554,7 @@ export default function App() {
 
   const handleResetGame = () => {
     setGameState(initialGameState);
-    localStorage.removeItem('koth_game_state');
+    localStorage.removeItem(STORAGE_KEY);
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify({
         type: 'GAME_STATE_SYNC',
@@ -354,17 +566,19 @@ export default function App() {
   // If running directly as OBS Browser Source (`?mode=overlay`):
   if (isPureOverlayMode) {
     return (
-      <div className="min-h-screen bg-transparent select-none">
+      <div className="h-screen w-screen overflow-hidden bg-transparent select-none">
         <OverlayView
           gameState={gameState}
           config={config}
           floatingItems={floatingItems}
+          rocketGifts={rocketGifts}
           isHit={isHit}
           isHealed={isHealed}
           takeoverInfo={takeoverInfo}
           tiktokStatus={tiktokStatus}
           onClearTakeover={() => setTakeoverInfo(null)}
           orientation={urlOrientation || config.orientation}
+          isFullOverlay={true}
         />
       </div>
     );
@@ -373,8 +587,14 @@ export default function App() {
   // Pure Overlay Preview Mode (streamer testing full screen overlay)
   if (activeView === 'overlay') {
     return (
-      <div className="min-h-screen bg-transparent select-none">
-        <div className="fixed top-3 left-3 z-50">
+      <div className="h-screen w-screen overflow-hidden bg-transparent select-none">
+        <div
+          className={`fixed top-3 left-3 z-50 transition-all duration-300 ${
+            showOverlayControls
+              ? 'opacity-100 translate-y-0 pointer-events-auto'
+              : 'opacity-0 -translate-y-2 pointer-events-none'
+          }`}
+        >
           <button
             onClick={() => setActiveView('studio')}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/95 hover:bg-slate-800 border border-slate-700 text-xs text-amber-300 font-semibold shadow-xl transition-all"
@@ -388,12 +608,14 @@ export default function App() {
           gameState={gameState}
           config={config}
           floatingItems={floatingItems}
+          rocketGifts={rocketGifts}
           isHit={isHit}
           isHealed={isHealed}
           takeoverInfo={takeoverInfo}
           tiktokStatus={tiktokStatus}
           onClearTakeover={() => setTakeoverInfo(null)}
           orientation={urlOrientation || config.orientation}
+          isFullOverlay={true}
         />
       </div>
     );
@@ -465,6 +687,7 @@ export default function App() {
               gameState={gameState}
               config={config}
               floatingItems={floatingItems}
+              rocketGifts={rocketGifts}
               isHit={isHit}
               isHealed={isHealed}
               takeoverInfo={takeoverInfo}
@@ -482,6 +705,7 @@ export default function App() {
             config={config}
             tiktokStatus={tiktokStatus}
             onSimulateGift={handleSimulateGift}
+            onSimulateLike={handleSimulateLike}
             onUpdateConfig={handleUpdateConfig}
             onConnectTikTok={handleConnectTikTok}
             onDisconnectTikTok={handleDisconnectTikTok}

@@ -204,6 +204,144 @@ class SoundController {
   }
 
   /**
+   * Sound 4: Rocket Launch Whoosh Sound
+   * Rapid whooshing air-rush / thruster ignition sound when the rocket launches from the bottom
+   */
+  public playWoosh(customUrl?: string) {
+    if (this.isMuted || this.volume <= 0) return;
+
+    if (customUrl) {
+      this.playCustomAudio(customUrl);
+      return;
+    }
+
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+      const duration = 0.42;
+
+      // Filtered rushing wind noise
+      const bufferSize = Math.floor(ctx.sampleRate * duration);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const bandpass = ctx.createBiquadFilter();
+      bandpass.type = 'bandpass';
+      bandpass.Q.setValueAtTime(2.2, now);
+      // Frequency ramps up smoothly from 260Hz to 1600Hz as rocket accelerates
+      bandpass.frequency.setValueAtTime(260, now);
+      bandpass.frequency.exponentialRampToValueAtTime(1700, now + 0.2);
+      bandpass.frequency.exponentialRampToValueAtTime(500, now + duration);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.001, now);
+      noiseGain.gain.linearRampToValueAtTime(this.volume * 0.7, now + 0.1);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      noise.connect(bandpass);
+      bandpass.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+
+      noise.start(now);
+      noise.stop(now + duration);
+
+      // Sub-harmonic pitch sweep for thruster momentum
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(110, now);
+      osc.frequency.exponentialRampToValueAtTime(420, now + 0.22);
+      osc.frequency.exponentialRampToValueAtTime(160, now + duration);
+
+      oscGain.gain.setValueAtTime(0.001, now);
+      oscGain.gain.linearRampToValueAtTime(this.volume * 0.35, now + 0.08);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      osc.connect(oscGain);
+      oscGain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + duration);
+    } catch (e) {
+      console.warn('[Audio] Woosh sound error:', e);
+    }
+  }
+
+  /**
+   * Sound 5: Heavy Impact Thud Sound
+   * Deep, solid physical impact when the rocket hits the defender profile
+   */
+  public playThud(customUrl?: string) {
+    if (this.isMuted || this.volume <= 0) return;
+
+    if (customUrl) {
+      this.playCustomAudio(customUrl);
+      return;
+    }
+
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+      const duration = 0.32;
+
+      // Heavy sub-bass pitch drop (170Hz -> 36Hz)
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(170, now);
+      osc.frequency.exponentialRampToValueAtTime(36, now + duration);
+
+      gain.gain.setValueAtTime(this.volume * 0.95, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + duration);
+
+      // Low-frequency impact crunch
+      const bufferSize = Math.floor(ctx.sampleRate * 0.14);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const lowpass = ctx.createBiquadFilter();
+      lowpass.type = 'lowpass';
+      lowpass.frequency.setValueAtTime(450, now);
+      lowpass.frequency.exponentialRampToValueAtTime(50, now + 0.14);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(this.volume * 0.65, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+
+      noise.connect(lowpass);
+      lowpass.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+
+      noise.start(now);
+      noise.stop(now + 0.14);
+    } catch (e) {
+      console.warn('[Audio] Thud sound error:', e);
+    }
+  }
+
+  /**
    * Hook point for custom audio URLs (e.g. user provided MP3 or WAV)
    */
   private playCustomAudio(url: string) {

@@ -1,0 +1,5063 @@
+[
+  {
+    "id": "12852",
+    "name": "Level Ship",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7934",
+    "name": "Heart Me",
+    "diamondCount": 1,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "105810",
+    "name": "Guardian's Pledge",
+    "diamondCount": 4999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12853",
+    "name": "Level Ship",
+    "diamondCount": 21000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "51283",
+    "name": "DJ Peak",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "19074",
+    "name": "LIVE Ranking Headband",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1322340",
+    "name": "Cruiser",
+    "diamondCount": 150,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14883",
+    "name": "XXXL Flowers",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1462725",
+    "name": "Legacy in Bloom",
+    "diamondCount": 21000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13059",
+    "name": "Love KSA",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "15464",
+    "name": "Arcane Card",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "973086",
+    "name": "Iron Rod",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17211",
+    "name": "Maple Fireworks",
+    "diamondCount": 2000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13469",
+    "name": "Henry",
+    "diamondCount": 10000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "16115",
+    "name": "Firelight Kingdom",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "973050",
+    "name": "Wooden Rod",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1462721",
+    "name": "Live Up Earth",
+    "diamondCount": 15,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "973116",
+    "name": "Mystic Rod",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1462842",
+    "name": "Cute Bunny",
+    "diamondCount": 200,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1143818",
+    "name": "Courage potion",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "972130",
+    "name": "Rin the Snowborn",
+    "diamondCount": 25999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8603",
+    "name": "Leopard",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "133121",
+    "name": "Rosie on Stage",
+    "diamondCount": 2999,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1190496",
+    "name": "LUVE Cheer",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "59882",
+    "name": "Shell of a Warrior",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "9193",
+    "name": "Riyadh",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "127022",
+    "name": "Legend Rider",
+    "diamondCount": 12999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "10517",
+    "name": "Desert Wolf",
+    "diamondCount": 5500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8503",
+    "name": "Falcon",
+    "diamondCount": 10999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "973040",
+    "name": "Starfish",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1322363",
+    "name": "Compact EV",
+    "diamondCount": 4000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "59450",
+    "name": "Rookies Cup",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1322366",
+    "name": "Hot Rods",
+    "diamondCount": 12000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1322362",
+    "name": "Chopper Bike",
+    "diamondCount": 2499,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "53761",
+    "name": "Arabian Cheetah",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "972138",
+    "name": "Yuki's Vigilance",
+    "diamondCount": 42999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "10588",
+    "name": "Diamond Gun",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1296826",
+    "name": "Masquerade",
+    "diamondCount": 19999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "973150",
+    "name": "Magic Rod",
+    "diamondCount": 30000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1190501",
+    "name": "Daylight Debut",
+    "diamondCount": 13999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1377046",
+    "name": "Fruit Box",
+    "diamondCount": 599,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "946670",
+    "name": "Daylight Debut",
+    "diamondCount": 13999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17710",
+    "name": "Community Legends",
+    "diamondCount": 30000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "10994",
+    "name": "Bouquet",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1321071",
+    "name": "LIVE Ranking Party",
+    "diamondCount": 3999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "51281",
+    "name": "DJ Vinyl",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1322365",
+    "name": "Rally Car",
+    "diamondCount": 7000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "133119",
+    "name": "Music on Stage",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1322386",
+    "name": "Pop Out",
+    "diamondCount": 21000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9101",
+    "name": "TikTok Universe",
+    "diamondCount": 44999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1347195",
+    "name": "SEA Shell",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "13032",
+    "name": "Autumn Picnic",
+    "diamondCount": 1300,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1322348",
+    "name": "Moped",
+    "diamondCount": 400,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17213",
+    "name": "Autumn Leaves",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1296807",
+    "name": "Mysterious Mask",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1143825",
+    "name": "Proof of the King",
+    "diamondCount": 14999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "10022",
+    "name": "Gyeongbokgung",
+    "diamondCount": 20000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1213439",
+    "name": "Squirrel",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1462843",
+    "name": "Chubby Hamster",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13058",
+    "name": "Heart KSA",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "5338",
+    "name": "Unicorn Fantasy",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9532",
+    "name": "Shine Bright",
+    "diamondCount": 4088,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1143821",
+    "name": "The Trial of Sea",
+    "diamondCount": 4999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "972120",
+    "name": "Snowmoon Parasol",
+    "diamondCount": 14999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "946640",
+    "name": "LUVX Cheer",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1322334",
+    "name": "Scooter",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1374227",
+    "name": "Anybody Home?",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1321083",
+    "name": "Corgi's Happy Chuseok",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1347188",
+    "name": "Crownfish",
+    "diamondCount": 2800,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "18299",
+    "name": "Viking Hammer",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1213441",
+    "name": "Warm Cocoa",
+    "diamondCount": 30,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "440699",
+    "name": "Forest Beginnings",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17446",
+    "name": "Legendary Aegis",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17661",
+    "name": "Side by Side",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1347187",
+    "name": "Shell Castle",
+    "diamondCount": 18000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "15438",
+    "name": "LIVE Legends",
+    "diamondCount": 29999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "11838",
+    "name": "Diamond Gun",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "440717",
+    "name": "Black Paw",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1374221",
+    "name": "Eye for an Eye",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "946652",
+    "name": "Getting Ready",
+    "diamondCount": 1999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1374223",
+    "name": "Do Not Blow",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1165294",
+    "name": "Shooting Stars",
+    "diamondCount": 1580,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "973132",
+    "name": "Crystal Rod",
+    "diamondCount": 10000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1296800",
+    "name": "Halloween mood",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1296816",
+    "name": "Halloween Drink",
+    "diamondCount": 1299,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17713",
+    "name": "Community Power",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1462722",
+    "name": "Spark Ring Earth",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "5566",
+    "name": "Mishka Bear",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "15048",
+    "name": "Bird of Paradise",
+    "diamondCount": 8000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1347193",
+    "name": "Puffer Fish",
+    "diamondCount": 150,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1347194",
+    "name": "Shell Energy",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "946664",
+    "name": "Strike a Pose",
+    "diamondCount": 6000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "133123",
+    "name": "My Dream Stage",
+    "diamondCount": 5999,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1354783",
+    "name": "Legends Scroll",
+    "diamondCount": 2999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8469",
+    "name": "Wolf",
+    "diamondCount": 5500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13061",
+    "name": "Sports Car",
+    "diamondCount": 4999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "133120",
+    "name": "Take the Mic",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1462838",
+    "name": "Little Acorn",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "547121",
+    "name": "Desert Wolf",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "59881",
+    "name": "A Shard of Hope",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1347189",
+    "name": "Mermaid",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1143822",
+    "name": "Stormwave Armor",
+    "diamondCount": 8999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1322369",
+    "name": "Monster Truck",
+    "diamondCount": 14000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1462723",
+    "name": "Spark Stage Earth",
+    "diamondCount": 3999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17712",
+    "name": "Community Heart",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "547119",
+    "name": "Black Wolf",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8624",
+    "name": "Zeus",
+    "diamondCount": 34000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1143819",
+    "name": "Box of destiny",
+    "diamondCount": 899,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1296819",
+    "name": "Night of Yokai",
+    "diamondCount": 6000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "440687",
+    "name": "Kindom of Night",
+    "diamondCount": 899,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1377045",
+    "name": "Pumpkin Carriage",
+    "diamondCount": 1031,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6942",
+    "name": "Unicorn Fantasy",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "440713",
+    "name": "Brown Paw",
+    "diamondCount": 5,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "6833",
+    "name": "Castle Fantasy",
+    "diamondCount": 20000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "440703",
+    "name": "Desert Survivals",
+    "diamondCount": 399,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1347190",
+    "name": "Seaside Romance",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1374230",
+    "name": "A Fun House",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1462840",
+    "name": "Mountain Baby",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "946648",
+    "name": "HeartBeats",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1322359",
+    "name": "Cafe Racer",
+    "diamondCount": 700,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "16694",
+    "name": "XXXL Flowers",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1322371",
+    "name": "Vintage Car",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1322377",
+    "name": "Jet Car",
+    "diamondCount": 17000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1321068",
+    "name": "LIVE Ranking Ticket",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1322378",
+    "name": "Super Car",
+    "diamondCount": 19000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1374228",
+    "name": "Lovely to Have You",
+    "diamondCount": 6000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17589",
+    "name": "Side by Side",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "10716",
+    "name": "Blow a kiss",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "5780",
+    "name": "Bouquet Flower",
+    "diamondCount": 30,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "9072",
+    "name": "TikTok Universe",
+    "diamondCount": 44999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1377342",
+    "name": "The Fair King",
+    "diamondCount": 42999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8582",
+    "name": "TikTok Stars",
+    "diamondCount": 39999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7823",
+    "name": "Leon and Lion",
+    "diamondCount": 34000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8391",
+    "name": "Sam the Whale",
+    "diamondCount": 30000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6369",
+    "name": "Lion",
+    "diamondCount": 29999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7610",
+    "name": "Dragon Flame",
+    "diamondCount": 26999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7319",
+    "name": "Phoenix",
+    "diamondCount": 25999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7400",
+    "name": "Adam’s Dream",
+    "diamondCount": 25999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1377335",
+    "name": "Villainy Slain",
+    "diamondCount": 25999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1241070",
+    "name": "Siren's Aria",
+    "diamondCount": 22500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6751",
+    "name": "TikTok Shuttle",
+    "diamondCount": 20000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "59885",
+    "name": "Rust vs World",
+    "diamondCount": 18999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9466",
+    "name": "Amusement Park",
+    "diamondCount": 17000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "105817",
+    "name": "Stadium",
+    "diamondCount": 15999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8912",
+    "name": "Rosa Nebula",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "10670",
+    "name": "Future Journey",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "11571",
+    "name": "Singapore Skyline",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "11586",
+    "name": "Party On&On",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12743",
+    "name": "Rollercoaster",
+    "diamondCount": 15000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1377331",
+    "name": "Iron Resolve",
+    "diamondCount": 14999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "230821",
+    "name": "95 Fireworks",
+    "diamondCount": 13500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8419",
+    "name": "Red Lightning",
+    "diamondCount": 12000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1350872",
+    "name": "Fangster Morph",
+    "diamondCount": 11999,
+    "combo": false,
+    "type": 23
+  },
+  {
+    "id": "1350876",
+    "name": "Glampire Morph",
+    "diamondCount": 11999,
+    "combo": false,
+    "type": 23
+  },
+  {
+    "id": "1402658",
+    "name": "Hall of Legend",
+    "diamondCount": 11999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "169261",
+    "name": "Verified Glider",
+    "diamondCount": 10999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6149",
+    "name": "Interstellar",
+    "diamondCount": 10000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6203",
+    "name": "Sunset Speedway",
+    "diamondCount": 10000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8916",
+    "name": "Leon and Lili",
+    "diamondCount": 9699,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7764",
+    "name": "Star Throne",
+    "diamondCount": 7999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8420",
+    "name": "Star Throne",
+    "diamondCount": 7999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1350870",
+    "name": "Jack-o' Morph",
+    "diamondCount": 7999,
+    "combo": false,
+    "type": 23
+  },
+  {
+    "id": "17961",
+    "name": "Majestic Hearts",
+    "diamondCount": 7238,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6089",
+    "name": "Sports Car",
+    "diamondCount": 7000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6790",
+    "name": "Celebration Time",
+    "diamondCount": 6999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1137712",
+    "name": "Last Riff Roar",
+    "diamondCount": 6999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "18523",
+    "name": "TikTok Red Carpet",
+    "diamondCount": 6600,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9467",
+    "name": "Lili the Leopard",
+    "diamondCount": 6599,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "10669",
+    "name": "Future City",
+    "diamondCount": 6000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "10672",
+    "name": "Sam in New City",
+    "diamondCount": 6000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "11585",
+    "name": "Work Hard Play Harder",
+    "diamondCount": 6000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "15066",
+    "name": "Strong Finish",
+    "diamondCount": 6000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "59884",
+    "name": "Rust Reforged",
+    "diamondCount": 6000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17959",
+    "name": "Cub on Clouds",
+    "diamondCount": 5888,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17960",
+    "name": "Valiant Odyssey",
+    "diamondCount": 5888,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17958",
+    "name": "Fluffy Buddies",
+    "diamondCount": 5388,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "5348",
+    "name": "Unicorn Fantasy",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9500",
+    "name": "Flying Jets",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12304",
+    "name": "Diamond Gun",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17902",
+    "name": "Chopin's Nocturne",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56861",
+    "name": "Leon's Sigil Cape",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "866088",
+    "name": "Crowd Cheering",
+    "diamondCount": 5000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12744",
+    "name": "ChairSwing",
+    "diamondCount": 4999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14384",
+    "name": "Sage’s Venture",
+    "diamondCount": 4999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1350866",
+    "name": "Squitchy Morph",
+    "diamondCount": 4999,
+    "combo": false,
+    "type": 23
+  },
+  {
+    "id": "1465470",
+    "name": "Sage’s Venture",
+    "diamondCount": 4999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17957",
+    "name": "Sugar Whiskers",
+    "diamondCount": 4918,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "5767",
+    "name": "Private Jet",
+    "diamondCount": 4888,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6646",
+    "name": "Leon the Kitten",
+    "diamondCount": 4888,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13604",
+    "name": "Fiery Dragon",
+    "diamondCount": 4888,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "11810",
+    "name": "Your Concert",
+    "diamondCount": 4500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16899",
+    "name": "Magic World",
+    "diamondCount": 4088,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17955",
+    "name": "Look Up",
+    "diamondCount": 3350,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17956",
+    "name": "Dream Big",
+    "diamondCount": 3350,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "52619",
+    "name": "Hip-Hop Hen",
+    "diamondCount": 3200,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1479429",
+    "name": "Halloween Idol",
+    "diamondCount": 3200,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56610",
+    "name": "Sea Diny",
+    "diamondCount": 3088,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56611",
+    "name": "Sea Tom",
+    "diamondCount": 3088,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56612",
+    "name": "Sea Blitzy",
+    "diamondCount": 3088,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56613",
+    "name": "Sea Cooper",
+    "diamondCount": 3088,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6563",
+    "name": "Meteor Shower",
+    "diamondCount": 3000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "59322",
+    "name": "Summoning Horn",
+    "diamondCount": 3000,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1354593",
+    "name": "Rotary Backpack",
+    "diamondCount": 3000,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "9468",
+    "name": "Rhythmic Bear",
+    "diamondCount": 2999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17272",
+    "name": "Love in Sunset",
+    "diamondCount": 2999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17762",
+    "name": "Party Bus",
+    "diamondCount": 2999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "131894",
+    "name": "Match Maniac",
+    "diamondCount": 2999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1241064",
+    "name": "Ray Serenade",
+    "diamondCount": 2999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1354592",
+    "name": "Beacon",
+    "diamondCount": 2999,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "5765",
+    "name": "Motorcycle",
+    "diamondCount": 2988,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14037",
+    "name": "Pink Dream",
+    "diamondCount": 2988,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17954",
+    "name": "Samfaring Tom",
+    "diamondCount": 2850,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "139586",
+    "name": "Celebration Tape",
+    "diamondCount": 2800,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "11811",
+    "name": "Animal Band",
+    "diamondCount": 2500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "62501",
+    "name": "Tom Thunderfoot",
+    "diamondCount": 2499,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17953",
+    "name": "By the Glaziers",
+    "diamondCount": 2380,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "52618",
+    "name": "Wave Lights",
+    "diamondCount": 2200,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14788",
+    "name": "Blow Rosie Kisses",
+    "diamondCount": 2199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "14789",
+    "name": "Jollie's Heartland",
+    "diamondCount": 2199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14790",
+    "name": "Rocky's Punch",
+    "diamondCount": 2199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "14791",
+    "name": "Sage's Coinbot",
+    "diamondCount": 2199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6820",
+    "name": "Whale Diving",
+    "diamondCount": 2150,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9780",
+    "name": "Christmas Carousel",
+    "diamondCount": 2000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13466",
+    "name": "Crystal Crown",
+    "diamondCount": 2000,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17952",
+    "name": "Sky Drift",
+    "diamondCount": 2000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6789",
+    "name": "Star of Red Carpet",
+    "diamondCount": 1999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6862",
+    "name": "Cooper Flies Home",
+    "diamondCount": 1999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7529",
+    "name": "Mystery Firework",
+    "diamondCount": 1999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8277",
+    "name": "Love Drop",
+    "diamondCount": 1800,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "16670",
+    "name": "Fox Legend",
+    "diamondCount": 1800,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "105795",
+    "name": "Freestyle",
+    "diamondCount": 1800,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "657042",
+    "name": "Hug It Better",
+    "diamondCount": 1600,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "223562",
+    "name": "Penlight",
+    "diamondCount": 1599,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13211",
+    "name": "Shooting Stars",
+    "diamondCount": 1580,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7467",
+    "name": "Chasing the Dream",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9824",
+    "name": "Lover’s Lock",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9909",
+    "name": "Greeting Card",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "10668",
+    "name": "Future Encounter",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "11584",
+    "name": "Under Control",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12464",
+    "name": "Cherry Blossoms",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "15065",
+    "name": "Racing Debut",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17949",
+    "name": "You're So Fly",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17951",
+    "name": "Astrobear",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "52617",
+    "name": "Wild Mic",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "59883",
+    "name": "Ignition Check",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14398",
+    "name": "Vibrant Stage",
+    "diamondCount": 1400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "52616",
+    "name": "Party Laser",
+    "diamondCount": 1300,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13263",
+    "name": "Umbrella of Love",
+    "diamondCount": 1200,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "437679",
+    "name": "Bunny DJ",
+    "diamondCount": 1200,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "6090",
+    "name": "Fireworks",
+    "diamondCount": 1088,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17948",
+    "name": "Joy Floats",
+    "diamondCount": 1030,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17950",
+    "name": "Candy Puffs",
+    "diamondCount": 1030,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6781",
+    "name": "Watermelon Love",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6804",
+    "name": "Waterslide",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9498",
+    "name": "Blooming Ribbons",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "11046",
+    "name": "Galaxy",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13302",
+    "name": "Sparkle Dance",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "13574",
+    "name": "Match Drum",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14397",
+    "name": "Fairy Wings",
+    "diamondCount": 1000,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "14399",
+    "name": "Flamingo Groove",
+    "diamondCount": 1000,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "56598",
+    "name": "Firepit Diny",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56599",
+    "name": "Firepit Tom",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56600",
+    "name": "Firepit Blitzy",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56601",
+    "name": "Firepit Cooper",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56602",
+    "name": "Desert Diny",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56603",
+    "name": "Desert Tom",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56604",
+    "name": "Desert Blitzy",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56605",
+    "name": "Desert Cooper",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56606",
+    "name": "Tundra Diny",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56607",
+    "name": "Tundra Tom",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56608",
+    "name": "Tundra Blitzy",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56609",
+    "name": "Tundra Cooper",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "59321",
+    "name": "Magic Potion",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1137733",
+    "name": "A Garden Yonder",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6233",
+    "name": "Travel with You",
+    "diamondCount": 999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9717",
+    "name": "Lucky Airdrop Box",
+    "diamondCount": 999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "16749",
+    "name": "Grand show",
+    "diamondCount": 999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "985636",
+    "name": "Funky Hatter",
+    "diamondCount": 900,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "5978",
+    "name": "Train",
+    "diamondCount": 899,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1137707",
+    "name": "Stage Wiggle",
+    "diamondCount": 899,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "18537",
+    "name": "unity ballon",
+    "diamondCount": 800,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "118817",
+    "name": "Epic Pianist",
+    "diamondCount": 800,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14381",
+    "name": "Colorful Wings",
+    "diamondCount": 700,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "657024",
+    "name": "Sax Appeal",
+    "diamondCount": 700,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "5897",
+    "name": "Swan",
+    "diamondCount": 699,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "58235",
+    "name": "Seahorse Pop",
+    "diamondCount": 649,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16672",
+    "name": "Join Butterflies",
+    "diamondCount": 600,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "166576",
+    "name": "Sakura-style DJ",
+    "diamondCount": 600,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1342934",
+    "name": "Sakura Flute",
+    "diamondCount": 600,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "62487",
+    "name": "Soccer Holo",
+    "diamondCount": 599,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "739764",
+    "name": "Purrfect Pitch",
+    "diamondCount": 550,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "57593",
+    "name": "Hive Escape",
+    "diamondCount": 549,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "58238",
+    "name": "Drum Hamster",
+    "diamondCount": 549,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17947",
+    "name": "Bubbly Kiss",
+    "diamondCount": 530,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7168",
+    "name": "Money Gun",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9948",
+    "name": "You’re Amazing",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "10667",
+    "name": "VR Goggles",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "11583",
+    "name": "DJ Glasses",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "13072",
+    "name": "Dragon Crown",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15064",
+    "name": "Racing Helmet",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16637",
+    "name": "Bunny Crown",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16897",
+    "name": "Magic Prop",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "18232",
+    "name": "Cozy Xmas Set",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18508",
+    "name": "Mystery Box",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "19307",
+    "name": "Heart Guitar",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "56590",
+    "name": "Prairie Diny",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56591",
+    "name": "Prairie Tom",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56592",
+    "name": "Prairie Blitzy",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56593",
+    "name": "Prairie Cooper",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56594",
+    "name": "Jungle Diny",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56595",
+    "name": "Jungle Tom",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56596",
+    "name": "Jungle Blitzy",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "56597",
+    "name": "Jungle Cooper",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "57011",
+    "name": "Starry Fluff",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "59320",
+    "name": "Mystery Box",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "60553",
+    "name": "Roo Mother",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "118928",
+    "name": "Lost in Your Music",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "131887",
+    "name": "Match Master",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "139584",
+    "name": "Drum Pop",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "166581",
+    "name": "Sound Spell",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "437689",
+    "name": "Drum Genius",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "638006",
+    "name": "Out Pops Jollie!",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "842710",
+    "name": "Honey Strummer",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1298065",
+    "name": "Cosmic DJ",
+    "diamondCount": 500,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1354590",
+    "name": "Iron Anchor",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1429011",
+    "name": "Monster Box!",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "5731",
+    "name": "Coral",
+    "diamondCount": 499,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17983",
+    "name": "Rose Soundwave",
+    "diamondCount": 499,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "230707",
+    "name": "Eye on the Ball",
+    "diamondCount": 499,
+    "combo": false,
+    "type": 21
+  },
+  {
+    "id": "437709",
+    "name": "Key Master",
+    "diamondCount": 499,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1213714",
+    "name": "Fuzzy Drum",
+    "diamondCount": 499,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1428884",
+    "name": "Island Uke",
+    "diamondCount": 499,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15190",
+    "name": "Powerful Mind",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15193",
+    "name": "Hat of Joy",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17846",
+    "name": "Halloween Fun Hat",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18025",
+    "name": "Music Conductor",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18509",
+    "name": "Celebration Hat",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18607",
+    "name": "City Pop",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "19306",
+    "name": "Cupid Koala",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "48221",
+    "name": "Paw Call",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "54560",
+    "name": "Superwoman",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "57008",
+    "name": "Clover Hat",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "57595",
+    "name": "Sloth Peek",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "133360",
+    "name": "Pink Cowboy",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "191117",
+    "name": "Office Penguin",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "230709",
+    "name": "Steady on the Beam",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 21
+  },
+  {
+    "id": "437639",
+    "name": "Groove Straw",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1298057",
+    "name": "Glow Chant",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "11809",
+    "name": "Beating Heart",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15762",
+    "name": "Encore Clap",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17357",
+    "name": "Pirate's Treasure",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17827",
+    "name": "Candy Loot",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18137",
+    "name": "Captured Vocals",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18197",
+    "name": "Batting Cutie",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18199",
+    "name": "Space Love",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18226",
+    "name": "Xmas Tree Hat",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "58237",
+    "name": "Clown Boogie",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "118939",
+    "name": "Electronic Love Song",
+    "diamondCount": 449,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "166579",
+    "name": "Rock and Roll",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "842698",
+    "name": "Meowsic Trumpet",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1213710",
+    "name": "Cyber Strings",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1298061",
+    "name": "Lightning Look",
+    "diamondCount": 449,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "13988",
+    "name": "Crystal Dreams",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "13999",
+    "name": "Wishing Cake",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15195",
+    "name": "Mic Champ",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15761",
+    "name": "Bounce Speakers",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18229",
+    "name": "Reindeer Milk",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "57594",
+    "name": "Cheeky Pup",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "59774",
+    "name": "DJ Wave",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "60547",
+    "name": "Punch Cuddle",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "60550",
+    "name": "Glorious Chef",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "110506",
+    "name": "Rock Cats",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "170501",
+    "name": "Magic Accordion",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "191116",
+    "name": "Super Dad",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "437669",
+    "name": "Pop Parrot",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "437699",
+    "name": "Rock Idol",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "842694",
+    "name": "Neon Rockstar",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "985642",
+    "name": "Heartbeat Keys",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1137735",
+    "name": "The Mrazhemian",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1241753",
+    "name": "Siren's Echo",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1342924",
+    "name": "Starry Sax",
+    "diamondCount": 400,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "8914",
+    "name": "Forever Rosa",
+    "diamondCount": 399,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9825",
+    "name": "Magic Rhythm",
+    "diamondCount": 399,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "11178",
+    "name": "Relaxed Goose",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "11181",
+    "name": "Tom's Hug",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "12210",
+    "name": "Rosie the Rose Bean",
+    "diamondCount": 399,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12211",
+    "name": "Jollie the Joy Bean",
+    "diamondCount": 399,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12212",
+    "name": "Rocky the Rock Bean",
+    "diamondCount": 399,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12213",
+    "name": "Sage the Smart Bean",
+    "diamondCount": 399,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12935",
+    "name": "Sage's Slash",
+    "diamondCount": 399,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14214",
+    "name": " Let butterfly dances ",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "14554",
+    "name": "Kitten Kneading",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "14568",
+    "name": "Shoot the Apple",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15192",
+    "name": "Alien Buddy",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16671",
+    "name": "Rosie's Concert",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17904",
+    "name": "You Are Loved",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18198",
+    "name": "Tiger Lift",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18231",
+    "name": "Santa Owl Surprise",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18505",
+    "name": "Confetti Bear",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18606",
+    "name": "Singing Sax",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "19312",
+    "name": "Fairy Locket",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "19314",
+    "name": "Panda Snap",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "54557",
+    "name": "Blossom Fairy",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "57010",
+    "name": "Dreamy Hat",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "57597",
+    "name": "Vocal Bear",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "58236",
+    "name": "Cactus Shuffle",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "59319",
+    "name": "Health Potion",
+    "diamondCount": 399,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "60555",
+    "name": "Echo Mom",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "133359",
+    "name": "DJ Set",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "170503",
+    "name": "Beat Wings",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "170504",
+    "name": "Melody Headset",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "191123",
+    "name": "Papa Capybara",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "437599",
+    "name": "Aurora Groove",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "739778",
+    "name": "Floral Serenade",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "919330",
+    "name": "Wind on Kemenche",
+    "diamondCount": 399,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1137705",
+    "name": "Sing in Sync",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1298035",
+    "name": "Jiggly Pudding",
+    "diamondCount": 399,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1354589",
+    "name": "Pull Rod",
+    "diamondCount": 399,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "15764",
+    "name": "Backing Monkey",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16477",
+    "name": "Become Kitten",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16551",
+    "name": "Marked with Love",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16748",
+    "name": "Vinyl Flip",
+    "diamondCount": 349,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17103",
+    "name": "Juicy Cap",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17689",
+    "name": "Batwing Hat",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17984",
+    "name": "Beach Maracas",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18195",
+    "name": "Vintage flight",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18228",
+    "name": "Gingerbread Man",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18507",
+    "name": "Candy Bouquet",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18608",
+    "name": "Rocking Shroom",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "48232",
+    "name": "Sparkle Pony",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "54558",
+    "name": "Spring Bouquet",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "60549",
+    "name": "Craft Dreamer",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "60554",
+    "name": "Mom's Bonnet",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "110508",
+    "name": "Retro Melody",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "118926",
+    "name": "Ukulele Player",
+    "diamondCount": 349,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "121582",
+    "name": "Chopin in the Rain",
+    "diamondCount": 349,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "166583",
+    "name": "Electro Vibes",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "170505",
+    "name": "Retro Headset",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "437629",
+    "name": "Butterfly Vibe",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "739740",
+    "name": "Djembe Master",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "842704",
+    "name": "Spin Seal",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "985650",
+    "name": "Starry Seal",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1283010",
+    "name": "Munch Monster",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1428888",
+    "name": "Rose Wreath",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "13987",
+    "name": "Feather Mask",
+    "diamondCount": 300,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17271",
+    "name": "Air Dancer",
+    "diamondCount": 300,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "657072",
+    "name": "Galaxy's Bestest",
+    "diamondCount": 300,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6007",
+    "name": "Boxing Gloves",
+    "diamondCount": 299,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6267",
+    "name": "Corgi",
+    "diamondCount": 299,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9465",
+    "name": "Fruit Friends",
+    "diamondCount": 299,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "11179",
+    "name": "Naughty Chicken",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "11183",
+    "name": "Play for You",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "11808",
+    "name": "Rock Star",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "13073",
+    "name": "Butterfly for You",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "14557",
+    "name": "Puppy Kisses",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "14787",
+    "name": "Spider on web",
+    "diamondCount": 299,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "15194",
+    "name": "United Heart",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15380",
+    "name": "LIVE Ranking Crown",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15487",
+    "name": "Kicker Challenge",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15861",
+    "name": "TikTok Crown",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16669",
+    "name": "Hi! Rosie!",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17358",
+    "name": "Go Hamster",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17459",
+    "name": "Pawfect",
+    "diamondCount": 299,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17845",
+    "name": "Bat Headwear",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18026",
+    "name": "Melody Glasses",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18230",
+    "name": "Penguin Snowpal",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18610",
+    "name": "Music Mate",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "19311",
+    "name": "Love Call",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "48231",
+    "name": "Pony Lantern",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "54562",
+    "name": "Spring Sprout",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "57009",
+    "name": "Wakey Mallow",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "57596",
+    "name": "Sax Groove",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "59318",
+    "name": "Scroll",
+    "diamondCount": 299,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "60548",
+    "name": "Labor Power",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "121583",
+    "name": "Cello Romance",
+    "diamondCount": 299,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "130787",
+    "name": "Come On!",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "139582",
+    "name": "Cheering Towel",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "282749",
+    "name": "Swing Cello",
+    "diamondCount": 299,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "739730",
+    "name": "Rhythm Crown",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "985682",
+    "name": "Brazilian Vibe Cap",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "985702",
+    "name": "Tropical Mask",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1298039",
+    "name": "Cherry Scoop",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1342931",
+    "name": "Floral Lute",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1354586",
+    "name": "Bell",
+    "diamondCount": 299,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1370383",
+    "name": "Piano Bow",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1370390",
+    "name": "Dreamy Penguin",
+    "diamondCount": 299,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "127089",
+    "name": "Triple Thunder",
+    "diamondCount": 289,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "10547",
+    "name": "Pinch Face",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15191",
+    "name": "Candy Bouquet",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15199",
+    "name": "Ice Cream Mic",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15752",
+    "name": "Star Goggles",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15763",
+    "name": "Cheer Mic",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16478",
+    "name": "Music Bubbles",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17102",
+    "name": "Palm Breeze",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17104",
+    "name": "Forest Elf",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17821",
+    "name": "Face-pulling",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17985",
+    "name": "Treasured Voice",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18124",
+    "name": "Melodic birds",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18196",
+    "name": "Surfing Penguin",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18506",
+    "name": "Party Blossom",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18605",
+    "name": "Dreamy Strings",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "19308",
+    "name": "Sweet Flutter",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "54566",
+    "name": "Snow Bloom",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "59775",
+    "name": "Amped Up",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "118814",
+    "name": "Poetry Score",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "166578",
+    "name": "Singing Frog",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "282675",
+    "name": "Blast Drum",
+    "diamondCount": 249,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1282707",
+    "name": "Flower Courier",
+    "diamondCount": 249,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "18699",
+    "name": "Cat",
+    "diamondCount": 222,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "16300",
+    "name": "Rose Bear",
+    "diamondCount": 214,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13686",
+    "name": "Balloons",
+    "diamondCount": 200,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17962",
+    "name": "Magic Genie",
+    "diamondCount": 200,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "56589",
+    "name": "Magic Genie",
+    "diamondCount": 200,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "170193",
+    "name": "Semsemia",
+    "diamondCount": 200,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "170277",
+    "name": "Baglama",
+    "diamondCount": 200,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "5509",
+    "name": "Sunglasses",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "5586",
+    "name": "Hearts",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "6437",
+    "name": "Garland Headpiece",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "6671",
+    "name": "Love You",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6713",
+    "name": "Cheer For You",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "11177",
+    "name": "Coffee Magic",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "12302",
+    "name": "Twinkling Star",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13075",
+    "name": "Cheering Crab",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "14039",
+    "name": "Love Rain",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14382",
+    "name": "Floating Octopus",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "14555",
+    "name": "Flower Headband",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16811",
+    "name": "Sour Buddy",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "16896",
+    "name": "Rose Hand",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17004",
+    "name": "Rose Hand",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17101",
+    "name": "Coconut Juice",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17360",
+    "name": "Chirpy Kisses",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17667",
+    "name": "Side by Side",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17923",
+    "name": "Joker Ball",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "19309",
+    "name": "Heart Hood",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "19310",
+    "name": "Smile Latte",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "48225",
+    "name": "Party Pony",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "53781",
+    "name": "Night Star",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "101384",
+    "name": "Fan Cat",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "170498",
+    "name": "Bloom Brass",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "170508",
+    "name": "Rhythm Bot",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "842726",
+    "name": "Sunny Side Up",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "919320",
+    "name": "Talking Heartbeat",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1162910",
+    "name": "Mystic Panpipes",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1354585",
+    "name": "Gear",
+    "diamondCount": 199,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "127096",
+    "name": "Bruiser",
+    "diamondCount": 153,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "18168",
+    "name": "Song of Harvest",
+    "diamondCount": 150,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1402659",
+    "name": "Penlight",
+    "diamondCount": 150,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14000",
+    "name": "Bowknot",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15187",
+    "name": "Big Shout Out",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "15189",
+    "name": "Chatting Popcorn",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16479",
+    "name": "Masquerade",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "16552",
+    "name": "Balloon Crown",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17100",
+    "name": "Feather Tiara",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17359",
+    "name": "Caterpillar Chaos",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17844",
+    "name": "Catrina",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17986",
+    "name": "Raving Snail",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "19168",
+    "name": "Love Glasses",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "48224",
+    "name": "Fairy Hide",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "101198",
+    "name": "Frog Conductor",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "232592",
+    "name": "Tempo Flute",
+    "diamondCount": 149,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "282718",
+    "name": "Groove Clarinet",
+    "diamondCount": 149,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "919332",
+    "name": "Mystic Ney",
+    "diamondCount": 149,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1283006",
+    "name": "Sweetheart Macaron",
+    "diamondCount": 149,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "46675",
+    "name": "Crossette Firework",
+    "diamondCount": 129,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "5582",
+    "name": "Mishka Bear",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "5585",
+    "name": "Confetti",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "5660",
+    "name": "Hand Heart",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12316",
+    "name": "Balloon Gift Box",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "13301",
+    "name": "Singing Magic",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "13898",
+    "name": "Bouquet",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17585",
+    "name": "Match Wand",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17903",
+    "name": "Compact",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "59317",
+    "name": "Power Chip",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "544015",
+    "name": "Heart My Earthling",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "637996",
+    "name": "Gate to Treasure",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1354584",
+    "name": "Wooden Box",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1429013",
+    "name": "Danger Door",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "5659",
+    "name": "Paper Crane",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "6097",
+    "name": "Little Crown",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "6104",
+    "name": "Cap",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "6427",
+    "name": "Hat and Mustache",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "8130",
+    "name": "Like-Pop",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "11180",
+    "name": "Love Painting",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "13087",
+    "name": "Bubble Gum",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "14109",
+    "name": "Mark of Love",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "14453",
+    "name": "Breakthrough Star",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17105",
+    "name": "Sundae Bowl",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "17922",
+    "name": "Charmer Bow",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "127090",
+    "name": "Cursed Kick",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "127094",
+    "name": "Wobbler",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "127098",
+    "name": "Stabilizer",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "170506",
+    "name": "Singing Mushroom",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "170507",
+    "name": "Bloom Melody",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "232593",
+    "name": "Groove Guitar",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "282739",
+    "name": "Fiesta Accordion",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "437561",
+    "name": "Pearl Chime",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "842718",
+    "name": "Cow-napping",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "985644",
+    "name": "Candy Blast",
+    "diamondCount": 99,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1167765",
+    "name": "Breeze Quena",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1167772",
+    "name": "Healing Sape",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1328548",
+    "name": "Pad Master",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1329196",
+    "name": "Palace Qanun",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "17729",
+    "name": "Family",
+    "diamondCount": 90,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12969",
+    "name": "Love Letter",
+    "diamondCount": 88,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14038",
+    "name": "Butterfly",
+    "diamondCount": 88,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "16812",
+    "name": "Takoyaki",
+    "diamondCount": 88,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "18167",
+    "name": "Cendol",
+    "diamondCount": 88,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "127088",
+    "name": "Single Strike",
+    "diamondCount": 70,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "5879",
+    "name": "Doughnut",
+    "diamondCount": 30,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "17460",
+    "name": "You are on a Roll",
+    "diamondCount": 30,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "59316",
+    "name": "Energy Capsule",
+    "diamondCount": 30,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1354583",
+    "name": "Energy Drop",
+    "diamondCount": 30,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1429000",
+    "name": "Ghostfire",
+    "diamondCount": 30,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "5658",
+    "name": "Perfume",
+    "diamondCount": 20,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "59315",
+    "name": "Traffic Cone",
+    "diamondCount": 20,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "626064",
+    "name": "G.O.A.T. Busker",
+    "diamondCount": 20,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1354581",
+    "name": "Mushroom",
+    "diamondCount": 20,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1473091",
+    "name": "No Comment",
+    "diamondCount": 20,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1473093",
+    "name": "Huh?",
+    "diamondCount": 20,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1473095",
+    "name": "Rage Mode",
+    "diamondCount": 20,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1487605",
+    "name": "Carnival Tent",
+    "diamondCount": 20,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "19443",
+    "name": "Bravo!",
+    "diamondCount": 15,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "626056",
+    "name": "Kudos for My Star",
+    "diamondCount": 15,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1329117",
+    "name": "Lyric Mail",
+    "diamondCount": 15,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "8913",
+    "name": "Rosa",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "9947",
+    "name": "Friendship Necklace",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "13300",
+    "name": "Heart Gaze",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "15063",
+    "name": "Journey Pass",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "18107",
+    "name": "Style Me Up",
+    "diamondCount": 10,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "19448",
+    "name": "Slow motion",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "59314",
+    "name": "Banana Peel",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "231882",
+    "name": "Songs of LIVE",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "544253",
+    "name": "I Like What I See",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "638002",
+    "name": "Treasure's Key",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1137734",
+    "name": "I'm Yours",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1354579",
+    "name": "Magic Feather",
+    "diamondCount": 10,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "118812",
+    "name": "Divine Fingers",
+    "diamondCount": 6,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "5487",
+    "name": "Finger Heart",
+    "diamondCount": 5,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "12963",
+    "name": "Shining Starlight",
+    "diamondCount": 5,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "19445",
+    "name": "Name shoutout",
+    "diamondCount": 5,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "19447",
+    "name": "Overreact",
+    "diamondCount": 5,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "105781",
+    "name": "Spinning Soccer",
+    "diamondCount": 5,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "919386",
+    "name": "Love in Scent",
+    "diamondCount": 5,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1137702",
+    "name": "Encore Ticket",
+    "diamondCount": 5,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1402661",
+    "name": "Star Light",
+    "diamondCount": 5,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "5269",
+    "name": "TikTok",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "5655",
+    "name": "Rose",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "5827",
+    "name": "Ice Cream Cone",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "6064",
+    "name": "GG",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "6246",
+    "name": "Thumbs Up",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "6247",
+    "name": "Heart",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "6784",
+    "name": "Cake Slice",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "6788",
+    "name": "Glow Stick",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "6890",
+    "name": "Love you",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "10585",
+    "name": "Rendang Chicken",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "13298",
+    "name": "Wink Charm",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "15232",
+    "name": "You're awesome",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "17085",
+    "name": "Music  Album",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "19438",
+    "name": "Pop",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "19439",
+    "name": "Oldies",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "19441",
+    "name": "Freestyle",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "19446",
+    "name": "Wink wink",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "56560",
+    "name": "My First Rose",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "58213",
+    "name": "coldy",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "59313",
+    "name": "Red Lightning",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "59511",
+    "name": "Blue Lightning",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "59512",
+    "name": "Yellow Lightning",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "637990",
+    "name": "Treasure Clover",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1473098",
+    "name": "LOL",
+    "diamondCount": 20,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1473096",
+    "name": "Tiny Blush",
+    "diamondCount": 20,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1479226",
+    "name": "Spooky Rock",
+    "diamondCount": 2200,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1473068",
+    "name": "Diva Feathers",
+    "diamondCount": 450,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1473067",
+    "name": "Rock Demon",
+    "diamondCount": 349,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1402980",
+    "name": "You Are Wanted!",
+    "diamondCount": 9999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1402977",
+    "name": "Wanted a Treat?",
+    "diamondCount": 2599,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "919346",
+    "name": "Welcome Dallah",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1167769",
+    "name": "Mate Melody",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1167779",
+    "name": "Mantap",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1402975",
+    "name": "Which Bro?",
+    "diamondCount": 799,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1347121",
+    "name": "Mirwas Beat",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1402973",
+    "name": "Peeka-Bro",
+    "diamondCount": 199,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "1447278",
+    "name": "Grand show",
+    "diamondCount": 999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1447277",
+    "name": "Vinyl Flip",
+    "diamondCount": 349,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "1447275",
+    "name": "Music  Album",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "1429010",
+    "name": "Palm of Protection",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "9427",
+    "name": "Pegasus",
+    "diamondCount": 42999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9092",
+    "name": "Fire Phoenix",
+    "diamondCount": 41999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8651",
+    "name": "Thunder Falcon",
+    "diamondCount": 39999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7312",
+    "name": "TikTok Universe+",
+    "diamondCount": 34999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14661",
+    "name": "Infinite Heart",
+    "diamondCount": 23999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12853",
+    "name": "Level Ship",
+    "diamondCount": 21000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7125",
+    "name": "Premium Shuttle",
+    "diamondCount": 20000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8248",
+    "name": "Fly Love",
+    "diamondCount": 19999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "909798",
+    "name": "Fantastic Fly Love",
+    "diamondCount": 19999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14660",
+    "name": "Crystal Heart",
+    "diamondCount": 14999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12680",
+    "name": "Level-up Spectacle",
+    "diamondCount": 12999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8247",
+    "name": "Happy Party",
+    "diamondCount": 6999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14659",
+    "name": "Devoted Heart",
+    "diamondCount": 5999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "105810",
+    "name": "Guardian's Pledge",
+    "diamondCount": 4999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7124",
+    "name": "Signature Jet",
+    "diamondCount": 4888,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12679",
+    "name": "Level-up Spotlight",
+    "diamondCount": 2999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8245",
+    "name": "Here We Go",
+    "diamondCount": 1799,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14658",
+    "name": "Blooming Heart",
+    "diamondCount": 1599,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12852",
+    "name": "Level Ship",
+    "diamondCount": 1500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7123",
+    "name": "Shiny Air Balloon",
+    "diamondCount": 1000,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "9138",
+    "name": "Trending Figure",
+    "diamondCount": 999,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7122",
+    "name": "Gem Gun",
+    "diamondCount": 500,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8244",
+    "name": "Hands Up",
+    "diamondCount": 499,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14657",
+    "name": "Budding Heart",
+    "diamondCount": 299,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "7121",
+    "name": "Marvelous Confetti",
+    "diamondCount": 100,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12357",
+    "name": "Club Victory",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "12678",
+    "name": "Level-up Sparks",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "14656",
+    "name": "Greeting Heart",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "153753",
+    "name": "Club Victory",
+    "diamondCount": 99,
+    "combo": true,
+    "type": 2
+  },
+  {
+    "id": "8243",
+    "name": "Cheer You Up",
+    "diamondCount": 9,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "12356",
+    "name": "Club Power",
+    "diamondCount": 9,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "16690",
+    "name": "Super Popular",
+    "diamondCount": 9,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "153751",
+    "name": "Club Power",
+    "diamondCount": 9,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "9139",
+    "name": "Team Bracelet",
+    "diamondCount": 2,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "7934",
+    "name": "Heart Me",
+    "diamondCount": 1,
+    "combo": false,
+    "type": 4
+  },
+  {
+    "id": "12355",
+    "name": "Club Cheers",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "13651",
+    "name": "Go Popular",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  },
+  {
+    "id": "153750",
+    "name": "Club Cheers",
+    "diamondCount": 1,
+    "combo": true,
+    "type": 1
+  }
+]
